@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-    --font-display: "poppins", "sans-serif";
+    --font-display: "Poppins", "sans-serif";
+    --font-logo2: "Red Hat Display", sans-serif;
+    --font-logo3: "Cal Sans", "serif";
+
     --breakpoint-3xl: 120rem;
     --color-avocado-100: #eeffe5;
     --color-avocado-200: #d8ffc7;
@@ -9,7 +12,16 @@
     --color-avocado-400: #5af526;
     --color-avocado-500: #38dc06;
     --color-avocado-600: #2bc700;
+    --color-avocado-700: #1f8506;
+    --color-avocado-800: #1d690b;
+    --color-avocado-900: #1b580f;
+    --color-avocado-950: #083201;
+
     --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
     --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
-    /* ... */
+
+    --color-mainLightBg: #f9fafb;
+
+    --color-mainBorder: #d1d5dc;
+    --color-grayDull: #4a5565;
 }
