@@ -25,7 +25,16 @@ const isValidated = computed(() => {
     );
 });
 
-const createAccount = () => {
+const clearUser = () => {
+    user.value = {
+        email: "",
+        password: "",
+        name: "",
+    };
+    secondPassword.value = "";
+};
+
+const createAccount = async () => {
     if (secondPassword.value !== user.value.password) {
         error.value = {
             show: true,
@@ -36,6 +45,25 @@ const createAccount = () => {
             show: false,
             text: "",
         };
+
+        const request = await fetch("http://localhost:5000/sign-in", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user.value),
+        });
+
+        const response = await request.json();
+
+        if (!response.success) {
+            error.value = {
+                show: true,
+                text: response.message,
+            };
+        } else {
+            clearUser();
+        }
     }
 };
 </script>
