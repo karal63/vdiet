@@ -50,34 +50,65 @@ router.post("/log-in", async (req, res) => {
             [req.body.email]
         );
 
-        console.log(userRows[0].password);
+        const user = userRows[0];
+        if (!user) {
+            return res
+                .status(400)
+                .json({ success: false, data: "Invalid credentials." });
+        }
 
-        bcrypt.compare(
-            req.body.password,
-            userRows[0].password,
-            (error, isMatch) => {
-                if (error || !isMatch) {
-                    return res
-                        .status(400)
-                        .json({ success: false, data: "Invalid credentials." });
-                }
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!isMatch) {
+            return res
+                .status(400)
+                .json({ success: false, data: "Invalid credentials." });
+        }
 
-                const token = jwt.sign(
-                    {
-                        userId: userRows.id,
-                        username: userRows.name,
-                    },
-                    process.env.JWT_KEY,
-                    { expiresIn: "15m" }
-                );
-
-                return res.status(200).json({ success: true, data: token });
-            }
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                username: user.name,
+            },
+            process.env.JWT_KEY,
+            { expiresIn: "15m" }
         );
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+        });
+
+        return res.status(200).json({ success: true, data: token });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Database error" });
+        return res.status(500).json({ success: false, data: "Server error." });
     }
+});
+
+const verifyToken = (req, res, next) => {
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res
+                .status(401)
+                .json({ success: false, message: "No token provided" });
+        }
+
+        const user = jwt.verify(token, process.env.JWT_KEY);
+        req.user = user;
+        next();
+    } catch (error) {
+        console.error("JWT verification failed:", error);
+        return res
+            .status(401)
+            .json({ success: false, message: "Invalid token" });
+    }
+};
+
+router.get("/protected/dashboard", verifyToken, (req, res) => {
+    res.status(200).json({ success: true, user: req.user });
 });
 
 module.exports = router;

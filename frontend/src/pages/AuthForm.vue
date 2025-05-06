@@ -4,8 +4,10 @@ import { computed, ref } from "vue";
 // types
 import type { User, Error } from "../types/global";
 import { useGlobalStore } from "../stores/globalStore";
+import { useRoute, useRouter } from "vue-router";
 
 const store = useGlobalStore();
+const router = useRouter();
 
 // props & emits
 const props = defineProps<{
@@ -69,6 +71,7 @@ const createAccount = async () => {
     if (props.mode === "signup") {
         request = await fetch("http://localhost:5000/sign-in", {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -77,6 +80,7 @@ const createAccount = async () => {
     } else {
         request = await fetch("http://localhost:5000/log-in", {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -89,6 +93,7 @@ const createAccount = async () => {
         return setError(true, response.data);
     }
 
+    router.push("/dashboard");
     store.authKey = response.data;
     setError(false, "");
     clearUser();

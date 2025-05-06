@@ -6,6 +6,7 @@ import { createRouter, createWebHistory } from "vue-router";
 // pages
 import App from "./App.vue";
 import AuthForm from "./pages/AuthForm.vue";
+import Dashboard from "./pages/Dashboard.vue";
 
 const routes = [
     {
@@ -17,6 +18,11 @@ const routes = [
         path: "/sign-up",
         component: AuthForm,
         props: { mode: "signup" },
+    },
+    {
+        path: "/dashboard",
+        component: Dashboard,
+        meta: { requiresAuth: true },
     },
 ];
 

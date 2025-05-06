@@ -8,3 +8,10 @@ export type Error = {
     show: boolean;
     text: string;
 };
+
+export type FetchedUser = {
+    userId: number;
+    username: string;
+    iat: number;
+    exp: number;
+};
