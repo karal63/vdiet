@@ -5,12 +5,18 @@ import { createRouter, createWebHistory } from "vue-router";
 
 // pages
 import App from "./App.vue";
-import SignIn from "./pages/SignIn.vue";
+import AuthForm from "./pages/AuthForm.vue";
 
 const routes = [
     {
-        path: "/sign-in",
-        component: SignIn,
+        path: "/log-in",
+        component: AuthForm,
+        props: { mode: "login" },
+    },
+    {
+        path: "/sign-up",
+        component: AuthForm,
+        props: { mode: "signup" },
     },
 ];
 

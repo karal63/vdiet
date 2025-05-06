@@ -8,7 +8,6 @@
                     >V</span
                 ><span class="text-3xl">diet</span>
             </RouterLink>
-            <!-- <h1 class="text-3xl font-logo3">Vdiet</h1> -->
         </div>
     </div>
 </template>
