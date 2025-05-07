@@ -32,6 +32,8 @@ const router = useRouter();
 
 //     verifyUser();
 // });
+
+console.log(store.user);
 </script>
 
 <template>

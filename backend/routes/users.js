@@ -86,42 +86,32 @@ router.post("/log-in", async (req, res) => {
     }
 });
 
-// const verifyToken = (req, res, next) => {
-//     try {
-//         const token = req.cookies.token;
+const verifyToken = (req, res, next) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return res
+                .status(401)
+                .json({ status: false, message: "No token provided." });
+        }
 
-//         if (!token) {
-//             return res
-//                 .status(401)
-//                 .json({ success: false, message: "No token provided" });
-//         }
-
-//         const user = jwt.verify(token, process.env.JWT_KEY);
-//         req.user = user;
-//         next();
-//     } catch (error) {
-//         console.error("JWT verification failed:", error);
-//         return res
-//             .status(401)
-//             .json({ success: false, message: "Invalid token" });
-//     }
-// };
+        const user = jwt.verify(token, process.env.JWT_KEY);
+        req.user = user;
+        next();
+    } catch (error) {
+        console.error("JWT verification failed:", error);
+        return res
+            .status(401)
+            .json({ success: false, message: "Invalid token" });
+    }
+};
 
 // router.get("/protected/dashboard", verifyToken, (req, res) => {
 //     res.status(200).json({ success: true, user: req.user });
 // });
 
-router.get("/auth/status", (req, res) => {
-    try {
-        const token = req.cookies.token;
-        if (!token) {
-            return res.status(200).json({ status: false });
-        }
-        return res.status(200).json({ status: true });
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({ status: false });
-    }
+router.get("/auth/status", verifyToken, (req, res) => {
+    return res.status(200).json({ status: true, user: req.user });
 });
 
 module.exports = router;

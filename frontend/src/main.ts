@@ -39,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
             });
 
             const data = await res.json();
-            console.log("Auth status response:", data);
+            console.log(data.status);
 
             if (data.status) {
                 next();
