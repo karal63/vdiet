@@ -152,7 +152,7 @@ const createAccount = async () => {
                     type="submit"
                     class="w-full bg-avocado-600 py-2 mt-5 rounded-md text-white disabled:text-mainLightBg disabled:bg-avocado-200 cursor-pointer hover:bg-avocado-500 transition-all"
                 >
-                    Create Account
+                    {{ mode === "signup" ? "Create account" : "Log in" }}
                 </button>
             </form>
 

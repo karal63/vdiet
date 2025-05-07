@@ -7,7 +7,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
 import AuthForm from "./pages/AuthForm.vue";
 import Dashboard from "./pages/Dashboard.vue";
-import { useGlobalStore } from "./stores/globalStore";
 
 const routes = [
     {
@@ -33,14 +32,27 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    let isLoggedIn = await fetch("http://localhost:5000/auth/status", {
-        credentials: "include",
-    });
-    isLoggedIn = await isLoggedIn.json();
-    console.log(isLoggedIn.status);
-    if (to.meta.requiresAuth && !isLoggedIn) {
-        next("/login");
-    } else next();
+    if (to.meta.requiresAuth) {
+        try {
+            const res = await fetch("http://localhost:5000/auth/status", {
+                credentials: "include",
+            });
+
+            const data = await res.json();
+            console.log("Auth status response:", data);
+
+            if (data.status) {
+                next();
+            } else {
+                next("/log-in");
+            }
+        } catch (err) {
+            console.log("Auth check failed", err);
+            next("/log-in");
+        }
+    } else {
+        next();
+    }
 });
 
 const pinia = createPinia();

@@ -7,31 +7,31 @@ import { useRouter } from "vue-router";
 const store = useGlobalStore();
 const router = useRouter();
 
-onMounted(() => {
-    const verifyUser = async () => {
-        try {
-            const req = await fetch(
-                "http://localhost:5000/protected/dashboard",
-                {
-                    method: "GET",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-            const res = await req.json();
+// onMounted(() => {
+//     const verifyUser = async () => {
+//         try {
+//             const req = await fetch(
+//                 "http://localhost:5000/protected/dashboard",
+//                 {
+//                     method: "GET",
+//                     credentials: "include",
+//                     headers: { "Content-Type": "application/json" },
+//                 }
+//             );
+//             const res = await req.json();
 
-            if (!res.success) {
-                router.push("/log-in");
-            }
+//             if (!res.success) {
+//                 router.push("/log-in");
+//             }
 
-            store.user = res.user;
-        } catch (error) {
-            console.log(error);
-        }
-    };
+//             store.user = res.user;
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     };
 
-    verifyUser();
-});
+//     verifyUser();
+// });
 </script>
 
 <template>
