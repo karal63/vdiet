@@ -111,4 +111,12 @@ router.get("/protected/dashboard", verifyToken, (req, res) => {
     res.status(200).json({ success: true, user: req.user });
 });
 
+router.get("/auth/status", (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(200).json({ status: true });
+    }
+    return res.status(200).json({ status: false });
+});
+
 module.exports = router;

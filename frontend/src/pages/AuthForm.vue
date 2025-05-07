@@ -93,7 +93,7 @@ const createAccount = async () => {
         return setError(true, response.data);
     }
 
-    router.push("/dashboard");
+    // router.push("/dashboard");
     store.authKey = response.data;
     setError(false, "");
     clearUser();

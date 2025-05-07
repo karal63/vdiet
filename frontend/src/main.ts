@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
 import AuthForm from "./pages/AuthForm.vue";
 import Dashboard from "./pages/Dashboard.vue";
+import { useGlobalStore } from "./stores/globalStore";
 
 const routes = [
     {
@@ -29,6 +30,17 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach(async (to, from, next) => {
+    let isLoggedIn = await fetch("http://localhost:5000/auth/status", {
+        credentials: "include",
+    });
+    isLoggedIn = await isLoggedIn.json();
+    console.log(isLoggedIn.status);
+    if (to.meta.requiresAuth && !isLoggedIn) {
+        next("/login");
+    } else next();
 });
 
 const pinia = createPinia();

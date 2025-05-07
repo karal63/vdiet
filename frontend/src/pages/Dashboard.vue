@@ -20,7 +20,7 @@ onMounted(() => {
             );
             const res = await req.json();
 
-            if (!res.status) {
+            if (!res.success) {
                 router.push("/log-in");
             }
 
