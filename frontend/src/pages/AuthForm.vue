@@ -65,9 +65,6 @@ const createAccount = async () => {
     }
     setError(false, "");
 
-    // registration
-    let request;
-
     if (props.mode === "signup") {
         await store.signup(
             user.value.email,

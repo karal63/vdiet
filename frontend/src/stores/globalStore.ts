@@ -5,6 +5,8 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 export const useGlobalStore = defineStore("global", () => {
+    const loggedUser = ref({});
+
     const isAuthenticated = ref(false);
 
     const login = async (email: string, password: string) => {
@@ -25,11 +27,25 @@ export const useGlobalStore = defineStore("global", () => {
         isAuthenticated.value = true;
     };
 
-    const logout = () => {
+    const logout = async () => {
+        await axios.post("http://localhost:5000/logout");
         isAuthenticated.value = false;
     };
 
-    const isLoading = ref<boolean>(false);
+    const getLoggedUser = async () => {
+        loggedUser.value = await axios.get("http://localhost:5000/auth/status");
+    };
 
-    return { isAuthenticated, login, signup, refresh, isLoading };
+    const isLoading = ref<boolean>(true);
+
+    return {
+        isAuthenticated,
+        login,
+        signup,
+        refresh,
+        logout,
+        isLoading,
+        loggedUser,
+        getLoggedUser,
+    };
 });

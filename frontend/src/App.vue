@@ -9,4 +9,8 @@ import { useGlobalStore } from "./stores/globalStore.ts";
 import { onMounted, watch } from "vue";
 
 const store = useGlobalStore();
+
+onMounted(async () => {
+    await store.getLoggedUser();
+});
 </script>

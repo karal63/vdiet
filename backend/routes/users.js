@@ -28,7 +28,7 @@ function generateTokens(user) {
 
 router.post("/signup", async (req, res) => {
     const { email, password, name } = req.body;
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     try {
         const [emailRows] = await db.execute(
             "SELECT email FROM users WHERE email = ?",
@@ -86,8 +86,6 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// cookies are stored with delay, causes first log not working so add some loader or smth.
-
 router.post("/refresh", async (req, res) => {
     const token = req.cookies.refreshToken;
     if (!token) return res.sendStatus(401);
@@ -96,8 +94,8 @@ router.post("/refresh", async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_TOKEN);
         const accessToken = jwt.sign(
             {
-                userId: decoded.id,
-                username: decoded.name,
+                userId: decoded.userId,
+                username: decoded.username,
             },
             process.env.JWT_ACCESS_TOKEN,
             { expiresIn: "15m" }
@@ -120,30 +118,16 @@ router.get("/auth/status", (req, res) => {
     if (!token) return res.sendStatus(401);
     try {
         const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
-        res.json({ user: decoded });
+        res.status(200).json({ user: decoded });
     } catch (error) {
         req.sendStatus(403);
     }
 });
 
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    console.log(authHeader);
-    const token = authHeader && authHeader.split(" ")[1];
-
-    if (!token) {
-        return res.sendStatus(401);
-    }
-
-    try {
-        jwt.verify(token, process.env.JWT_ACCESS_TOKEN, (err, user) => {
-            req.user = user;
-            next();
-        });
-    } catch (error) {
-        console.error("JWT verification failed:", error);
-        return res.status(401).json({ status: false });
-    }
-};
+router.post("/logout", (req, res) => {
+    res.clearCookie("refreshToken", { path: "/refresh" });
+    res.clearCookie("accessToken");
+    res.sendStatus(200);
+});
 
 module.exports = router;

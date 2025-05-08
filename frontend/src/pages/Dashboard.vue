@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import type { FetchedUser } from "../types/global";
 import { useGlobalStore } from "../stores/globalStore";
 import { useRouter } from "vue-router";
 
 const store = useGlobalStore();
 const router = useRouter();
+
+console.log(store.isLoading);
 </script>
 
 <template>
     <div v-if="store.isLoading">
-        <h1 class="text-4xl">Loading...</h1>
+        <h1 class="text-4xl bg-purple-500">Loading...</h1>
     </div>
     <div v-else>
         <h1>Dashboard</h1>
-        <p>Hello, {{ store.isAuthenticated }}</p>
+        <p>Hello, {{ store.loggedUser.data.user.username }}</p>
     </div>
 </template>
