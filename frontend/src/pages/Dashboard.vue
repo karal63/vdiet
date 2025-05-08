@@ -6,37 +6,14 @@ import { useRouter } from "vue-router";
 
 const store = useGlobalStore();
 const router = useRouter();
-
-// onMounted(() => {
-//     const verifyUser = async () => {
-//         try {
-//             const req = await fetch(
-//                 "http://localhost:5000/protected/dashboard",
-//                 {
-//                     method: "GET",
-//                     credentials: "include",
-//                     headers: { "Content-Type": "application/json" },
-//                 }
-//             );
-//             const res = await req.json();
-
-//             if (!res.success) {
-//                 router.push("/log-in");
-//             }
-
-//             store.user = res.user;
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     };
-
-//     verifyUser();
-// });
-
-console.log(store.user);
 </script>
 
 <template>
-    <h1>Dashboard</h1>
-    <p>Hello, {{ store.user.username }}</p>
+    <div v-if="store.isLoading">
+        <h1 class="text-4xl">Loading...</h1>
+    </div>
+    <div v-else>
+        <h1>Dashboard</h1>
+        <p>Hello, {{ store.isAuthenticated }}</p>
+    </div>
 </template>

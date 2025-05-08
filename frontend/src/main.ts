@@ -3,19 +3,21 @@ import "./style.css";
 import { createPinia } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
-// pages
 import App from "./App.vue";
 import AuthForm from "./pages/AuthForm.vue";
 import Dashboard from "./pages/Dashboard.vue";
+import { useGlobalStore } from "./stores/globalStore";
+
+const pinia = createPinia();
 
 const routes = [
     {
-        path: "/log-in",
+        path: "/login",
         component: AuthForm,
         props: { mode: "login" },
     },
     {
-        path: "/sign-up",
+        path: "/signup",
         component: AuthForm,
         props: { mode: "signup" },
     },
@@ -32,29 +34,20 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    const store = useGlobalStore();
     if (to.meta.requiresAuth) {
+        store.isLoading = true;
         try {
-            const res = await fetch("http://localhost:5000/auth/status", {
-                credentials: "include",
-            });
-
-            const data = await res.json();
-            console.log(data.status);
-
-            if (data.status) {
-                next();
-            } else {
-                next("/log-in");
-            }
-        } catch (err) {
-            console.log("Auth check failed", err);
-            next("/log-in");
+            await store.refresh();
+            next();
+        } catch {
+            next("/login");
+        } finally {
+            store.isLoading = false;
         }
     } else {
         next();
     }
 });
-
-const pinia = createPinia();
 
 createApp(App).use(pinia).use(router).mount("#app");

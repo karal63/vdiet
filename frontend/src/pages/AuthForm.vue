@@ -69,32 +69,16 @@ const createAccount = async () => {
     let request;
 
     if (props.mode === "signup") {
-        request = await fetch("http://localhost:5000/sign-in", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user.value),
-        });
+        await store.signup(
+            user.value.email,
+            user.value.password,
+            user.value.name
+        );
     } else {
-        request = await fetch("http://localhost:5000/log-in", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user.value),
-        });
+        await store.login(user.value.email, user.value.password);
     }
 
-    const response = await request.json();
-    if (!response.success) {
-        return setError(true, response.data);
-    }
-
-    // router.push("/dashboard");
-    store.authKey = response.data;
+    router.push("/dashboard");
     setError(false, "");
     clearUser();
 };

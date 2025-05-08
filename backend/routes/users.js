@@ -4,13 +4,36 @@ const db = require("../db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-router.post("/sign-in", async (req, res) => {
+function generateTokens(user) {
+    const accessToken = jwt.sign(
+        {
+            userId: user.id,
+            username: user.name,
+        },
+        process.env.JWT_ACCESS_TOKEN,
+        { expiresIn: "15m" }
+    );
+
+    const refreshToken = jwt.sign(
+        {
+            userId: user.id,
+            username: user.name,
+        },
+        process.env.JWT_REFRESH_TOKEN,
+        { expiresIn: "7d" }
+    );
+
+    return { accessToken, refreshToken };
+}
+
+router.post("/signup", async (req, res) => {
+    const { email, password, name } = req.body;
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     try {
         const [emailRows] = await db.execute(
             "SELECT email FROM users WHERE email = ?",
-            [req.body.email]
+            [email]
         );
-        // email check
         if (emailRows.length > 0) {
             return res
                 .status(500)
@@ -19,99 +42,108 @@ router.post("/sign-in", async (req, res) => {
 
         const [nameRows] = await db.execute(
             "SELECT name FROM users WHERE name = ?",
-            [req.body.name]
+            [name]
         );
-        // name check
         if (nameRows.length > 0) {
             return res
                 .status(500)
                 .json({ success: false, data: "Name is already taken." });
         }
 
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        // creating user
         await db.execute(
             "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
-            [req.body.email, hashedPassword, req.body.name]
+            [email, hashedPassword, name]
         );
-
-        return res.status(200).json({ success: true, data: "" });
-        // Get JWT key and login user automaticaly
+        return res.sendStatus(201);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, data: "Database error." });
+        res.status(400).json({ success: false, data: "Database error." });
     }
 });
 
-router.post("/log-in", async (req, res) => {
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    const [userRows] = await db.execute("SELECT * FROM users WHERE email = ?", [
+        email,
+    ]);
+    const user = userRows[0];
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+        const { accessToken, refreshToken } = generateTokens(user);
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/refresh",
+        });
+        res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+        });
+        res.sendStatus(200);
+    } else {
+        res.status(401).json({ success: false, data: "Invalid credentials." });
+    }
+});
+
+// cookies are stored with delay, causes first log not working so add some loader or smth.
+
+router.post("/refresh", async (req, res) => {
+    const token = req.cookies.refreshToken;
+    if (!token) return res.sendStatus(401);
+
     try {
-        const [userRows] = await db.execute(
-            "SELECT * FROM users WHERE email = ?",
-            [req.body.email]
-        );
-
-        const user = userRows[0];
-        if (!user) {
-            return res
-                .status(400)
-                .json({ success: false, data: "Invalid credentials." });
-        }
-
-        const isMatch = await bcrypt.compare(req.body.password, user.password);
-        if (!isMatch) {
-            return res
-                .status(400)
-                .json({ success: false, data: "Invalid credentials." });
-        }
-
-        const token = jwt.sign(
+        const decoded = jwt.verify(token, process.env.JWT_REFRESH_TOKEN);
+        const accessToken = jwt.sign(
             {
-                userId: user.id,
-                username: user.name,
+                userId: decoded.id,
+                username: decoded.name,
             },
-            process.env.JWT_KEY,
+            process.env.JWT_ACCESS_TOKEN,
             { expiresIn: "15m" }
         );
 
-        res.cookie("token", token, {
+        res.cookie("accessToken", accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
         });
 
-        return res.status(200).json({ success: true, data: token });
+        res.sendStatus(200);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, data: "Server error." });
+        res.sendStatus(403);
+    }
+});
+
+router.get("/auth/status", (req, res) => {
+    const token = req.cookies.accessToken;
+    if (!token) return res.sendStatus(401);
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
+        res.json({ user: decoded });
+    } catch (error) {
+        req.sendStatus(403);
     }
 });
 
 const verifyToken = (req, res, next) => {
-    try {
-        const token = req.cookies.token;
-        if (!token) {
-            return res
-                .status(401)
-                .json({ status: false, message: "No token provided." });
-        }
+    const authHeader = req.headers.authorization;
+    console.log(authHeader);
+    const token = authHeader && authHeader.split(" ")[1];
 
-        const user = jwt.verify(token, process.env.JWT_KEY);
-        req.user = user;
-        next();
+    if (!token) {
+        return res.sendStatus(401);
+    }
+
+    try {
+        jwt.verify(token, process.env.JWT_ACCESS_TOKEN, (err, user) => {
+            req.user = user;
+            next();
+        });
     } catch (error) {
         console.error("JWT verification failed:", error);
-        return res
-            .status(401)
-            .json({ success: false, message: "Invalid token" });
+        return res.status(401).json({ status: false });
     }
 };
-
-// router.get("/protected/dashboard", verifyToken, (req, res) => {
-//     res.status(200).json({ success: true, user: req.user });
-// });
-
-router.get("/auth/status", verifyToken, (req, res) => {
-    return res.status(200).json({ status: true, user: req.user });
-});
 
 module.exports = router;
