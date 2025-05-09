@@ -1,13 +1,26 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import type { LoggedUser } from "../types/global";
 
 axios.defaults.withCredentials = true;
 
 export const useGlobalStore = defineStore("global", () => {
-    const loggedUser = ref({});
+    const loggedUser = ref<LoggedUser | null>();
 
     const isAuthenticated = ref(false);
+
+    const getLoggedUser = async () => {
+        isLoading.value = true;
+        try {
+            const res = await axios.get("http://localhost:5000/auth/status");
+            loggedUser.value = res.data.user;
+        } catch {
+            loggedUser.value = null;
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     const login = async (email: string, password: string) => {
         await axios.post("http://localhost:5000/login", { email, password });
@@ -25,15 +38,12 @@ export const useGlobalStore = defineStore("global", () => {
     const refresh = async () => {
         await axios.post("http://localhost:5000/refresh");
         isAuthenticated.value = true;
+        await getLoggedUser();
     };
 
     const logout = async () => {
         await axios.post("http://localhost:5000/logout");
         isAuthenticated.value = false;
-    };
-
-    const getLoggedUser = async () => {
-        loggedUser.value = await axios.get("http://localhost:5000/auth/status");
     };
 
     const isLoading = ref<boolean>(true);

@@ -4,8 +4,6 @@ import { useRouter } from "vue-router";
 
 const store = useGlobalStore();
 const router = useRouter();
-
-console.log(store.isLoading);
 </script>
 
 <template>
@@ -14,6 +12,6 @@ console.log(store.isLoading);
     </div>
     <div v-else>
         <h1>Dashboard</h1>
-        <p>Hello, {{ store.loggedUser.data.user.username }}</p>
+        <p>Hello, {{ store.loggedUser?.username }}</p>
     </div>
 </template>

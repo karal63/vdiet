@@ -36,14 +36,11 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const store = useGlobalStore();
     if (to.meta.requiresAuth) {
-        store.isLoading = true;
         try {
             await store.refresh();
             next();
         } catch {
             next("/login");
-        } finally {
-            store.isLoading = false;
         }
     } else {
         next();

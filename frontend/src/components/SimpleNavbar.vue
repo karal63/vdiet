@@ -20,7 +20,11 @@ const logoutFromAcc = () => {
                 ><span class="text-3xl">diet</span>
             </RouterLink>
 
-            <button @click="logoutFromAcc" class="cursor-pointer">
+            <button
+                v-if="store.isAuthenticated"
+                @click="logoutFromAcc"
+                class="cursor-pointer"
+            >
                 Log out
             </button>
 

@@ -9,7 +9,7 @@ export type Error = {
     text: string;
 };
 
-export type FetchedUser = {
+export type LoggedUser = {
     userId: number;
     username: string;
     iat: number;
