@@ -2,8 +2,12 @@
 import { Icon } from "@iconify/vue";
 import { RouterLink, useRoute } from "vue-router";
 import { sidebarLinks } from "../constants/sidebarLinks";
+import ProfileMenu from "./dashboard/ProfileMenu.vue";
+import { ref } from "vue";
 
 const route = useRoute();
+
+const profileMenuOpen = ref(false);
 </script>
 
 <template>
@@ -13,7 +17,7 @@ const route = useRoute();
         <div
             class="relative bg-mainLightBg h-[70%] w-full border border-mainBorder rounded-full shadow-2xl"
         >
-            <ul class="mt-4 relative z-10 flex flex-col gap-2">
+            <ul class="mt-4 relative z-10 flex flex-col gap-3">
                 <li
                     v-for="link in sidebarLinks"
                     class="w-full flex justify-center"
@@ -25,15 +29,15 @@ const route = useRoute();
                         <Icon
                             v-if="route.path !== link.path"
                             :icon="link.icon"
-                            class="text-4xl rounded-xl text-avocado-600 hover:bg-avocado-100 w-10 h-10 transition-all"
+                            class="px-[4px] rounded-xl text-avocado-700 hover:bg-avocado-200 w-10 h-10 transition-all"
                         />
                         <Icon
                             v-else
                             :icon="link.activeIcon"
-                            class="text-4xl rounded-xl text-avocado-600 bg-avocado-100 w-10 h-10 transition-all"
+                            class="px-[4px] rounded-xl text-avocado-700 hover:bg-avocado-200 w-10 h-10 transition-all"
                         />
 
-                        <p class="text-[.8rem] text-avocado-600 font-medium">
+                        <p class="text-[.8rem] font-medium text-avocado-700">
                             {{ link.name }}
                         </p>
                     </RouterLink>
@@ -49,8 +53,10 @@ const route = useRoute();
         <!-- profile button -->
         <div class="absolute bottom-4 left-0 w-full flex justify-center">
             <button
-                class="w-10 h-10 bg-gradient-to-r from-avocado-200 to-avocado-500 rounded-full"
+                @click="profileMenuOpen = !profileMenuOpen"
+                class="w-10 h-10 bg-gradient-to-r from-avocado-200 to-avocado-500 rounded-full cursor-pointer"
             ></button>
+            <ProfileMenu v-if="profileMenuOpen" />
         </div>
     </div>
 </template>
