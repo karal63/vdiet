@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 // types
 import type { User, Error } from "../types/global";
@@ -22,11 +22,6 @@ const user = ref<User>({
 
 const secondPassword = ref("");
 
-const error = ref<Error>({
-    show: false,
-    text: "",
-});
-
 const clearUser = () => {
     user.value = {
         email: "",
@@ -36,18 +31,11 @@ const clearUser = () => {
     secondPassword.value = "";
 };
 
-const setError = (show: boolean, text: string) => {
-    error.value = {
-        show,
-        text,
-    };
-};
-
 const createAccount = async () => {
     // chech if all inputs are provided
     if (props.mode === "login") {
         if (!user.value.email || !user.value.password) {
-            return setError(true, "All fields are required.");
+            return store.setError(true, "All fields are required.");
         }
     } else {
         if (
@@ -56,14 +44,14 @@ const createAccount = async () => {
             !secondPassword.value ||
             !user.value.name
         ) {
-            return setError(true, "All fields are required.");
+            return store.setError(true, "All fields are required.");
         }
         // validating passwords
         if (secondPassword.value !== user.value.password) {
-            return setError(true, "Passwords are not the same.");
+            return store.setError(true, "Passwords are not the same.");
         }
     }
-    setError(false, "");
+    store.setError(false, "");
 
     if (props.mode === "signup") {
         await store.signup(
@@ -76,7 +64,7 @@ const createAccount = async () => {
     }
 
     router.push("/dashboard");
-    setError(false, "");
+    store.setError(false, "");
     clearUser();
 };
 </script>
@@ -138,20 +126,20 @@ const createAccount = async () => {
             </form>
 
             <!-- error -->
-            <p v-if="error.show" class="text-red-500">
-                {{ error.text }}
+            <p v-if="store.error.show" class="text-red-500">
+                {{ store.error.text }}
             </p>
 
             <p v-if="mode === 'signup'" class="mt-5 text-sm text-grayDull">
                 Already have the account?
-                <RouterLink to="/log-in" class="text-avocado-600"
+                <RouterLink to="/login" class="text-avocado-600"
                     >Log in</RouterLink
                 >
             </p>
 
             <p v-if="mode === 'login'" class="mt-5 text-sm text-grayDull">
                 Don't have an account?
-                <RouterLink to="/sign-up" class="text-avocado-600"
+                <RouterLink to="/signup" class="text-avocado-600"
                     >Sign up</RouterLink
                 >
             </p>

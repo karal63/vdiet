@@ -82,13 +82,17 @@ router.post("/login", async (req, res) => {
         });
         res.sendStatus(200);
     } else {
-        res.status(401).json({ success: false, data: "Invalid credentials." });
+        res.status(401).json({
+            success: false,
+            message: "Invalid credentials.",
+        });
     }
 });
 
 router.post("/refresh", async (req, res) => {
     const token = req.cookies.refreshToken;
     if (!token) return res.sendStatus(401);
+    // .json({ success: false, message: "Invalid credentials." });
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_TOKEN);
@@ -116,6 +120,7 @@ router.post("/refresh", async (req, res) => {
 router.get("/auth/status", (req, res) => {
     const token = req.cookies.accessToken;
     if (!token) return res.sendStatus(401);
+    // .json({ status: false, message: "Invalid credentials." });
     try {
         const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
         res.status(200).json({ user: decoded });

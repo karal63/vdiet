@@ -7,10 +7,23 @@ import App from "./App.vue";
 import AuthForm from "./pages/AuthForm.vue";
 import Dashboard from "./pages/Dashboard.vue";
 import { useGlobalStore } from "./stores/globalStore";
+import ProtectedLayot from "./pages/ProtectedLayot.vue";
 
 const pinia = createPinia();
 
 const routes = [
+    {
+        path: "/user",
+        component: ProtectedLayot,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: "/dashboard",
+                component: Dashboard,
+                // meta: { requiresAuth: true },
+            },
+        ],
+    },
     {
         path: "/login",
         component: AuthForm,
@@ -21,11 +34,10 @@ const routes = [
         component: AuthForm,
         props: { mode: "signup" },
     },
-    {
-        path: "/dashboard",
-        component: Dashboard,
-        meta: { requiresAuth: true },
-    },
+    // {
+    //     path: "/",
+    //     component: Landing,
+    // },
 ];
 
 const router = createRouter({
