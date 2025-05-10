@@ -5,6 +5,7 @@ import { computed, ref, watchEffect } from "vue";
 import type { User, Error } from "../types/global";
 import { useGlobalStore } from "../stores/globalStore";
 import { useRoute, useRouter } from "vue-router";
+import SimpleNavbar from "../components/SimpleNavbar.vue";
 
 const store = useGlobalStore();
 const router = useRouter();
@@ -70,6 +71,8 @@ const createAccount = async () => {
 </script>
 
 <template>
+    <SimpleNavbar />
+
     <div
         class="h-[calc(100vh-72px)] bg-mainLightBg flex justify-center items-center"
     >

@@ -7,11 +7,15 @@ const router = useRouter();
 </script>
 
 <template>
-    <div v-if="store.isLoading">
-        <h1 class="text-4xl bg-purple-500">Loading...</h1>
-    </div>
-    <div v-else>
-        <h1>Dashboard</h1>
-        <p>Hello, {{ store.loggedUser?.username }}</p>
+    <div class="pl-[100px] pt-4 h-[100vh] bg-mainLightBg">
+        <div v-if="store.isLoading">
+            <h1 class="text-4xl bg-purple-500">Loading...</h1>
+        </div>
+        <div v-else>
+            <p class="text-3xl font-black">
+                Hello, {{ store.loggedUser?.username }}!
+            </p>
+            <div>cards etc...</div>
+        </div>
     </div>
 </template>

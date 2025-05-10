@@ -1,8 +1,6 @@
 <template>
-    <SimpleNavbar />
+    <!-- put here omething you want to have globally -->
     <router-view />
 </template>
 
-<script setup lang="ts">
-import SimpleNavbar from "./components/SimpleNavbar.vue";
-</script>
+<script setup lang="ts"></script>

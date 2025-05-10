@@ -22,6 +22,11 @@ const routes = [
                 component: Dashboard,
                 // meta: { requiresAuth: true },
             },
+            {
+                path: "/settings",
+                component: Dashboard,
+                // meta: { requiresAuth: true },
+            },
         ],
     },
     {

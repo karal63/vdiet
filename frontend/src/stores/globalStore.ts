@@ -34,7 +34,7 @@ export const useGlobalStore = defineStore("global", () => {
                 password,
             });
             isAuthenticated.value = true;
-        } catch (err) {
+        } catch (err: any) {
             setError(true, err.response.data.message);
         }
     };
