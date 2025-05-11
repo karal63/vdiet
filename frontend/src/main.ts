@@ -23,7 +23,12 @@ const routes = [
                 // meta: { requiresAuth: true },
             },
             {
-                path: "/settings",
+                path: "/workout",
+                component: Dashboard,
+                // meta: { requiresAuth: true },
+            },
+            {
+                path: "/sleep",
                 component: Dashboard,
                 // meta: { requiresAuth: true },
             },

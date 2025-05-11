@@ -7,7 +7,7 @@ const router = useRouter();
 </script>
 
 <template>
-    <div class="pl-[100px] pt-4 h-[100vh] bg-mainLightBg">
+    <div class="pl-[120px] pr-[40px] pt-4 h-[100vh] bg-mainLightBg">
         <div v-if="store.isLoading">
             <h1 class="text-4xl bg-purple-500">Loading...</h1>
         </div>
@@ -17,5 +17,9 @@ const router = useRouter();
             </p>
             <div>cards etc...</div>
         </div>
+
+        <div
+            class="w-full h-[300px] border border-mainBorder mt-5 rounded-xl"
+        ></div>
     </div>
 </template>

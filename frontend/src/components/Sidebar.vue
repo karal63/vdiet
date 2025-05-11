@@ -15,9 +15,9 @@ const profileMenuOpen = ref(false);
         class="absolute left-3 top-0 h-full w-[70px] bg-mainLightBg flex items-center"
     >
         <div
-            class="relative bg-mainLightBg h-[70%] w-full border border-mainBorder rounded-full shadow-2xl"
+            class="relative bg-avocado-100 h-[70%] w-full border border-avocado-300 rounded-full shadow-2xl"
         >
-            <ul class="mt-4 relative z-10 flex flex-col gap-3">
+            <ul class="mt-4 relative z-10 flex flex-col gap-4">
                 <li
                     v-for="link in sidebarLinks"
                     class="w-full flex justify-center"
@@ -34,7 +34,7 @@ const profileMenuOpen = ref(false);
                         <Icon
                             v-else
                             :icon="link.activeIcon"
-                            class="px-[4px] rounded-xl text-avocado-700 hover:bg-avocado-200 w-10 h-10 transition-all"
+                            class="px-[4px] rounded-xl text-avocado-700 bg-avocado-200 w-10 h-10 transition-all"
                         />
 
                         <p class="text-[.8rem] font-medium text-avocado-700">
