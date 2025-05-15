@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ControlPanel from "../components/dashboard/ControlPanel.vue";
 import FoodSection from "../components/dashboard/FoodSection.vue";
 import { dishes } from "../constants/dishes";
 import { useGlobalStore } from "../stores/globalStore";
@@ -21,5 +22,6 @@ const router = useRouter();
         </div>
 
         <FoodSection />
+        <ControlPanel />
     </div>
 </template>
