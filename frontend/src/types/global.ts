@@ -15,3 +15,9 @@ export type LoggedUser = {
     iat: number;
     exp: number;
 };
+
+export type Meal = {
+    id: number;
+    category: string;
+    name: string;
+};
