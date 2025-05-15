@@ -68,6 +68,14 @@ export const useGlobalStore = defineStore("global", () => {
         };
     };
 
+    const addDay = async () => {
+        const today = new Date().toISOString().split("T")[0];
+        const res = await axios.post("http://localhost:5000/users/history", {
+            today,
+        });
+        console.log(res);
+    };
+
     return {
         isAuthenticated,
         login,
@@ -79,5 +87,6 @@ export const useGlobalStore = defineStore("global", () => {
         getLoggedUser,
         error,
         setError,
+        addDay,
     };
 });

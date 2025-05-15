@@ -30,7 +30,7 @@ const showDetails = () => {
             @click="showDetails"
             class="w-full flex justify-between rounded-xl cursor-pointer"
         >
-            <h1 class="text-lg">{{ meal.type }}</h1>
+            <h1 class="text-lg w-[150px] text-left">{{ meal.type }}</h1>
 
             <div class="flex gap-5 items-center">
                 <span class="px-3 py-1 bg-avocado-300/50 rounded-lg"

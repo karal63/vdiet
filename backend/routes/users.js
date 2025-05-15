@@ -135,4 +135,46 @@ router.post("/logout", (req, res) => {
     res.sendStatus(200);
 });
 
+const verifyKey = (req, res, next) => {
+    const token = req.cookies.accessToken;
+    if (!token) return res.sendStatus(401);
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
+        req.decodedUser = decoded;
+        next();
+    } catch (error) {
+        res.sendStatus(401);
+    }
+};
+
+router.post("/users/history", verifyKey, async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            "SELECT history FROM users WHERE id = ?",
+            [req.decodedUser.userId]
+        );
+
+        const parsedHistory = JSON.parse(rows[0].history);
+
+        const isExisting = parsedHistory.find(
+            (day) => day.date === req.body.today
+        );
+
+        console.log(req.body.today);
+
+        if (isExisting) {
+            console.log("updating day");
+        } else {
+            console.log("adding");
+            await db.execute("UPDATE users SET history = ? WHERE id = ?", [
+                JSON.stringify([...parsedHistory, { date: req.body.today }]),
+                req.decodedUser.userId,
+            ]);
+        }
+        res.sendStatus(200);
+    } catch (error) {
+        res.sendStatus(400);
+    }
+});
+
 module.exports = router;
