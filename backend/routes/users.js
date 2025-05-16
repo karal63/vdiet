@@ -160,18 +160,45 @@ router.post("/users/history", verifyKey, async (req, res) => {
             (day) => day.date === req.body.today
         );
 
-        console.log(req.body.today);
-
         if (isExisting) {
-            console.log("updating day");
-        } else {
-            console.log("adding");
+            const updatedHistory = parsedHistory.map((day) => {
+                if (day.date === req.body.today) {
+                    return {
+                        date: day.date,
+                        food: [],
+                    };
+                }
+                return day;
+            });
+            const jsonUpdatedHistory = JSON.stringify(updatedHistory);
+
             await db.execute("UPDATE users SET history = ? WHERE id = ?", [
-                JSON.stringify([...parsedHistory, { date: req.body.today }]),
+                jsonUpdatedHistory,
+                req.decodedUser.userId,
+            ]);
+        } else {
+            await db.execute("UPDATE users SET history = ? WHERE id = ?", [
+                JSON.stringify([
+                    ...parsedHistory,
+                    { date: req.body.today, food: [] },
+                ]),
                 req.decodedUser.userId,
             ]);
         }
         res.sendStatus(200);
+    } catch (error) {
+        res.sendStatus(400);
+    }
+});
+
+router.get("/users/history", verifyKey, async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            "SELECT history FROM users WHERE id = ?",
+            [req.decodedUser.userId]
+        );
+
+        res.status(200).json(rows[0]);
     } catch (error) {
         res.sendStatus(400);
     }

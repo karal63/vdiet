@@ -21,3 +21,8 @@ export type Meal = {
     category: string;
     name: string;
 };
+
+export type History = {
+    date: string;
+    food?: Meal[];
+};

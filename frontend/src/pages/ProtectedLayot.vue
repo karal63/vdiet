@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watchEffect } from "vue";
+import { onMounted, watchEffect } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import { useGlobalStore } from "../stores/globalStore";
 import { useRouter } from "vue-router";
@@ -11,6 +11,15 @@ watchEffect(() => {
     if (!store.isAuthenticated) {
         router.push("/login");
     }
+});
+
+onMounted(() => {
+    store.addDay();
+    store.history = store.getDay();
+});
+
+watchEffect(() => {
+    store.history = store.addDay();
 });
 </script>
 
