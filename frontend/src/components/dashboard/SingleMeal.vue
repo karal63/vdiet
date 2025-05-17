@@ -3,37 +3,71 @@ import { Icon } from "@iconify/vue";
 import { ref, watch, watchEffect } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import type { Meal } from "../../types/global";
+import { useGlobalStore } from "../../stores/globalStore";
 
-const store = useFoodStore();
+const foodStore = useFoodStore();
+const globalStore = useGlobalStore();
 
 const props = defineProps<{
     meal: any;
 }>();
 
-const filteredMeals = ref<Meal[]>(
-    store.meals.filter(
-        (filteredMeal) => filteredMeal.category === props.meal.type
-    )
-);
+const filteredMeals = ref<Meal[]>();
 
 const showDetails = () => {
-    if (store.openedMealId === props.meal.id) {
-        return (store.openedMealId = null);
+    if (foodStore.openedMealId === props.meal.id) {
+        return (foodStore.openedMealId = null);
     }
-    store.openedMealId = props.meal.id;
+    foodStore.openedMealId = props.meal.id;
 };
+
+watch(
+    () => globalStore.currentDay.food,
+    () => {
+        filteredMeals.value = globalStore.currentDay.food.filter(
+            (filteredMeal) => filteredMeal.category === props.meal.type
+        );
+    }
+);
 </script>
 
 <template>
-    <div class="transition-all py-2 px-3">
+    <div class="transition-all">
         <button
             @click="showDetails"
-            class="w-full flex justify-between rounded-xl cursor-pointer"
+            class="w-full rounded-xl cursor-pointer py-2 px-3"
         >
-            <h1 class="text-lg w-[150px] text-left">{{ meal.type }}</h1>
+            <div class="flex justify-between">
+                <h1 class="text-lg w-[150px] text-left">{{ meal.type }}</h1>
 
-            <div class="flex gap-5 items-center">
-                <span class="px-3 py-1 bg-avocado-300/50 rounded-lg"
+                <div class="flex justify-center items-center">
+                    <button class="text-3xl cursor-pointer">
+                        <Icon icon="iconamoon:arrow-up-2-thin" />
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="transition-all"
+                :class="
+                    meal.id === foodStore.openedMealId
+                        ? 'h-[200px] mt-5'
+                        : 'h-0'
+                "
+            >
+                <ul
+                    v-if="meal.id === foodStore.openedMealId"
+                    class="flex flex-col divide-y divide-mainBorder"
+                >
+                    <li v-for="singleMeal in filteredMeals" class="py-2 flex">
+                        {{ singleMeal.name }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex gap-5 items-center mt-1">
+                <span
+                    class="px-3 py-1 bg-avocado-300/50 rounded-lg font-semibold text-avocado-900"
                     >Total:</span
                 >
                 <ul class="flex gap-4">
@@ -41,26 +75,6 @@ const showDetails = () => {
                     <li>Carbs: 40g</li>
                 </ul>
             </div>
-
-            <div class="flex justify-center items-center">
-                <button class="text-3xl cursor-pointer">
-                    <Icon icon="iconamoon:arrow-up-2-thin" />
-                </button>
-            </div>
         </button>
-
-        <div
-            class="transition-all mt-5"
-            :class="meal.id === store.openedMealId ? 'h-[200px]' : 'h-0'"
-        >
-            <ul
-                v-if="meal.id === store.openedMealId"
-                class="flex flex-col divide-y divide-mainBorder"
-            >
-                <li v-for="singleMeal in filteredMeals" class="py-2">
-                    {{ singleMeal.name }}
-                </li>
-            </ul>
-        </div>
     </div>
 </template>

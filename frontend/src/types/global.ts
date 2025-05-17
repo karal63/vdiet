@@ -18,6 +18,7 @@ export type LoggedUser = {
 
 export type Meal = {
     name: string;
+    category: string;
     portion: number;
     calories: number;
     macronutrients: {

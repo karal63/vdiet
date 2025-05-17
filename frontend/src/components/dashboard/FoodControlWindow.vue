@@ -9,7 +9,7 @@ const store = useFoodStore();
 
 <template>
     <div
-        class="absolute left-0 top-0 w-full h-full flex items-center justify-center bg-black/30 z-30"
+        class="absolute left-0 top-0 w-full h-full flex items-center justify-center bg-black/50 z-30"
     >
         <div class="w-[70%] h-[75%] flex gap-2">
             <div class="bg-white shadow-2xl rounded-3xl w-full px-8 py-6">
@@ -29,7 +29,7 @@ const store = useFoodStore();
             <div class="max-w-max">
                 <button
                     @click="store.isControlWindowOpen = false"
-                    class="text-2xl w-10 h-10 rounded-full flex-center bg-white shadow-2xl hover:bg-mainBorder transition-all cursor-pointer"
+                    class="text-2xl w-10 h-10 rounded-full flex-center bg-grayDull text-white shadow-2xl hover:bg-grayDull/90 transition-all cursor-pointer"
                 >
                     <Icon icon="material-symbols:close-rounded" />
                 </button>
