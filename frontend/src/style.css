@@ -24,4 +24,16 @@
 
     --color-mainBorder: #d1d5dc;
     --color-grayDull: #4a5565;
+    --color-secondary: #666666;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
 }

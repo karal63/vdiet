@@ -1,24 +1,11 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { useGlobalStore } from "../../stores/globalStore";
+import { useFoodStore } from "../../stores/foodStore";
 
-// TODO: make example adding food to the current day and put it in the database
-// use addDay function or create a new one that is for updating items
-// send items through post request, in the server get history find certain day and update it
-// overwrite array in database
-
-const store = useGlobalStore();
+const store = useFoodStore();
 
 const handleClick = () => {
-    store.currentDay.food = [
-        {
-            id: 3,
-            category: "Lunch",
-            name: "Meat with rice",
-        },
-    ];
-
-    store.updateDay(store.currentDay);
+    store.isControlWindowOpen = true;
 };
 </script>
 

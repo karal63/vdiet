@@ -17,9 +17,13 @@ export type LoggedUser = {
 };
 
 export type Meal = {
-    id: number;
-    category: string;
     name: string;
+    portion: number;
+    calories: number;
+    macronutrients: {
+        protein: number;
+        carbohydrates: number;
+    };
 };
 
 export type Day = {

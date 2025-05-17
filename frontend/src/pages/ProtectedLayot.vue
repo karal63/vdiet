@@ -1,27 +1,33 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from "vue";
+import { onMounted, watch, watchEffect } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import { useGlobalStore } from "../stores/globalStore";
 import { useRouter } from "vue-router";
+import { useFoodStore } from "../stores/foodStore";
 
-const store = useGlobalStore();
+const globalStore = useGlobalStore();
+const foodStore = useFoodStore();
 const router = useRouter();
 
 watchEffect(() => {
-    if (!store.isAuthenticated) {
+    if (!globalStore.isAuthenticated) {
         router.push("/login");
     }
 });
 
 onMounted(() => {
-    store.addDay();
-    store.getDay();
+    globalStore.addDay();
+    globalStore.getDay();
 });
 
-// watchEffect(() => {
-//     console.log("called");
-//     store.history = store.addDay();
-// });
+watch(
+    () => globalStore.currentDay,
+    () => {
+        console.log("updating meals in database");
+        globalStore.updateDay(globalStore.currentDay);
+    },
+    { deep: true }
+);
 </script>
 
 <template>
