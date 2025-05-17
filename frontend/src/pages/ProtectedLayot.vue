@@ -15,12 +15,13 @@ watchEffect(() => {
 
 onMounted(() => {
     store.addDay();
-    store.history = store.getDay();
+    store.getDay();
 });
 
-watchEffect(() => {
-    store.history = store.addDay();
-});
+// watchEffect(() => {
+//     console.log("called");
+//     store.history = store.addDay();
+// });
 </script>
 
 <template>

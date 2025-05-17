@@ -22,7 +22,7 @@ export type Meal = {
     name: string;
 };
 
-export type History = {
+export type Day = {
     date: string;
-    food?: Meal[];
+    food: Meal[];
 };

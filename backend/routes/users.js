@@ -160,23 +160,7 @@ router.post("/users/history", verifyKey, async (req, res) => {
             (day) => day.date === req.body.today
         );
 
-        if (isExisting) {
-            const updatedHistory = parsedHistory.map((day) => {
-                if (day.date === req.body.today) {
-                    return {
-                        date: day.date,
-                        food: [],
-                    };
-                }
-                return day;
-            });
-            const jsonUpdatedHistory = JSON.stringify(updatedHistory);
-
-            await db.execute("UPDATE users SET history = ? WHERE id = ?", [
-                jsonUpdatedHistory,
-                req.decodedUser.userId,
-            ]);
-        } else {
+        if (!isExisting) {
             await db.execute("UPDATE users SET history = ? WHERE id = ?", [
                 JSON.stringify([
                     ...parsedHistory,
@@ -185,6 +169,7 @@ router.post("/users/history", verifyKey, async (req, res) => {
                 req.decodedUser.userId,
             ]);
         }
+
         res.sendStatus(200);
     } catch (error) {
         res.sendStatus(400);
@@ -201,6 +186,37 @@ router.get("/users/history", verifyKey, async (req, res) => {
         res.status(200).json(rows[0]);
     } catch (error) {
         res.sendStatus(400);
+    }
+});
+
+router.put("/users/history", verifyKey, async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            "SELECT history FROM users WHERE id = ?",
+            [req.decodedUser.userId]
+        );
+
+        const parsedHistory = JSON.parse(rows[0].history);
+        console.log(req.body.globalCurrentDay.food);
+
+        const updatedHistory = parsedHistory.map((day) => {
+            if (day.date === req.body.today) {
+                return {
+                    ...day,
+                    food: req.body.globalCurrentDay.food,
+                };
+            }
+            return day;
+        });
+        const jsonUpdatedHistory = JSON.stringify(updatedHistory);
+
+        await db.execute("UPDATE users SET history = ? WHERE id = ?", [
+            jsonUpdatedHistory,
+            req.decodedUser.userId,
+        ]);
+    } catch (error) {
+        res.sendStatus(400);
+        console.log(error);
     }
 });
 

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
-import type { Error, History, LoggedUser } from "../types/global";
+import type { Day, Error, LoggedUser } from "../types/global";
 
 axios.defaults.withCredentials = true;
 
@@ -77,10 +77,24 @@ export const useGlobalStore = defineStore("global", () => {
 
     const getDay = async () => {
         const res = await axios.get("http://localhost:5000/users/history");
-        return JSON.parse(res.data.history);
+        const today = new Date().toISOString().split("T")[0];
+        currentDay.value = JSON.parse(res.data.history).find(
+            (day: any) => day.date === today
+        );
     };
 
-    const history = ref<History[]>();
+    const updateDay = async (globalCurrentDay: Day) => {
+        const today = new Date().toISOString().split("T")[0];
+        const res = await axios.put("http://localhost:5000/users/history", {
+            today,
+            globalCurrentDay,
+        });
+    };
+
+    const currentDay = ref<Day>({
+        date: "",
+        food: [],
+    });
 
     return {
         isAuthenticated,
@@ -96,5 +110,7 @@ export const useGlobalStore = defineStore("global", () => {
         addDay,
         getDay,
         history,
+        currentDay,
+        updateDay,
     };
 });
