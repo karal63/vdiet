@@ -4,11 +4,13 @@ import { ref, watchEffect } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 import { mealsPlan } from "../../constants/meals";
+import { v4 as uuidv4 } from "uuid";
+import type { Meal } from "../../types/global";
 
 const foodStore = useFoodStore();
 const globalStore = useGlobalStore();
 
-const meal = ref({
+const meal = ref<Meal>({
     name: "",
     category: "Uncategorized",
     portion: 0,
@@ -38,8 +40,15 @@ const cancelMeal = () => {
 };
 
 const saveMeal = () => {
-    globalStore.currentDay.food = [...globalStore.currentDay.food, meal.value];
+    globalStore.currentDay.food = [
+        ...globalStore.currentDay.food,
+        {
+            ...meal.value,
+            id: uuidv4(),
+        },
+    ];
     foodStore.isControlWindowOpen = false;
+    console.log(globalStore.currentDay.food);
 };
 </script>
 

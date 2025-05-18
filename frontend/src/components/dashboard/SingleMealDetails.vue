@@ -19,8 +19,6 @@ const showDetails = () => {
     }
     store.openedMealDetailsId = props.singleMeal.name;
 };
-
-console.log(props.singleMeal);
 </script>
 
 <template>

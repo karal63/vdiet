@@ -17,6 +17,7 @@ export type LoggedUser = {
 };
 
 export type Meal = {
+    id?: string;
     name: string;
     category: string;
     portion: number;
