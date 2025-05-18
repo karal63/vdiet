@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { ref, watch } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import type { Meal } from "../../types/global";
 import { useGlobalStore } from "../../stores/globalStore";
@@ -13,8 +13,6 @@ const props = defineProps<{
     meal: any;
 }>();
 
-const filteredMeals = ref<Meal[]>();
-
 const showDetails = () => {
     if (foodStore.openedMealId === props.meal.id) {
         return (foodStore.openedMealId = null);
@@ -22,14 +20,11 @@ const showDetails = () => {
     foodStore.openedMealId = props.meal.id;
 };
 
-watch(
-    () => globalStore.currentDay.food,
-    () => {
-        filteredMeals.value = globalStore.currentDay.food.filter(
-            (filteredMeal) => filteredMeal.category === props.meal.type
-        );
-    }
-);
+const filteredMeals = computed(() => {
+    return globalStore.currentDay.food.filter(
+        (filteredMeal) => filteredMeal.category === props.meal.type
+    );
+});
 </script>
 
 <template>
@@ -54,7 +49,12 @@ watch(
 
         <div
             class="transition-all px-7 overflow-hidden h-0"
-            :class="meal.id === foodStore.openedMealId ? 'h-[200px] mt-5' : ''"
+            :class="meal.id === foodStore.openedMealId ? `mt-5` : ''"
+            :style="`height: ${
+                meal.id === foodStore.openedMealId
+                    ? (filteredMeals?.length || 0) * 50
+                    : ''
+            }px`"
         >
             <ul class="flex flex-col divide-y divide-mainBorder">
                 <li v-for="singleMeal in filteredMeals">

@@ -11,7 +11,7 @@ const modalRef = useTemplateRef("modalRef");
 
 const handleClickOutside = (e: Event) => {
     if (e.target === modalRef.value) {
-        store.isControlWindowOpen = false;
+        store.hideControlWindow();
     }
 };
 onMounted(() => {
@@ -26,7 +26,7 @@ onUnmounted(() => {
 <template>
     <div
         ref="modalRef"
-        class="absolute left-0 top-0 w-full h-full flex items-center justify-center bg-black/50 z-30"
+        class="fixed left-0 top-0 w-full h-full flex items-center justify-center bg-black/50 z-30"
     >
         <div class="w-[70%] h-[75%] flex gap-2">
             <div class="bg-white shadow-2xl rounded-3xl w-full px-8 py-6">
@@ -45,7 +45,7 @@ onUnmounted(() => {
 
             <div class="max-w-max">
                 <button
-                    @click="store.isControlWindowOpen = false"
+                    @click="store.hideControlWindow()"
                     class="text-2xl w-10 h-10 rounded-full flex-center bg-grayDull text-white shadow-2xl hover:bg-grayDull/90 transition-all cursor-pointer"
                 >
                     <Icon icon="material-symbols:close-rounded" />

@@ -5,7 +5,7 @@ import { useFoodStore } from "../../stores/foodStore";
 const store = useFoodStore();
 
 const handleClick = () => {
-    store.isControlWindowOpen = true;
+    store.showControlWindow();
 };
 </script>
 

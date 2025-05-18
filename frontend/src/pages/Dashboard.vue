@@ -10,7 +10,9 @@ const foodStore = useFoodStore();
 </script>
 
 <template>
-    <div class="pl-[120px] pr-[40px] pt-4 h-[1000px] bg-mainLightBg">
+    <div
+        class="pl-[120px] pr-[40px] pt-4 h-[1000px] bg-mainLightBg !overflow-hidden"
+    >
         <div v-if="globalStore.isLoading">
             <h1 class="text-4xl bg-purple-500">Loading...</h1>
         </div>

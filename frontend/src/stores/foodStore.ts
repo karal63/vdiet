@@ -8,5 +8,21 @@ export const useFoodStore = defineStore("foodStore", () => {
 
     const isControlWindowOpen = ref(false);
 
-    return { meals, openedMealId, isControlWindowOpen };
+    const showControlWindow = () => {
+        isControlWindowOpen.value = true;
+        document.body.classList.add("overflow-y-hidden");
+    };
+
+    const hideControlWindow = () => {
+        isControlWindowOpen.value = false;
+        document.body.classList.remove("overflow-y-hidden");
+    };
+
+    return {
+        meals,
+        openedMealId,
+        isControlWindowOpen,
+        showControlWindow,
+        hideControlWindow,
+    };
 });
