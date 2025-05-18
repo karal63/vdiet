@@ -197,7 +197,6 @@ router.put("/users/history", verifyKey, async (req, res) => {
         );
 
         const parsedHistory = JSON.parse(rows[0].history);
-        console.log(req.body.globalCurrentDay.food);
 
         const updatedHistory = parsedHistory.map((day) => {
             if (day.date === req.body.today) {
@@ -214,6 +213,43 @@ router.put("/users/history", verifyKey, async (req, res) => {
             jsonUpdatedHistory,
             req.decodedUser.userId,
         ]);
+    } catch (error) {
+        res.sendStatus(400);
+        console.log(error);
+    }
+});
+
+router.delete("/users/history", verifyKey, async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            "SELECT history FROM users WHERE id = ?",
+            [req.decodedUser.userId]
+        );
+
+        const parsedHistory = JSON.parse(rows[0].history);
+
+        const updatedFood = parsedHistory[0].food.filter(
+            (meal) => meal.id !== req.body.id
+        );
+
+        const updatedHistory = parsedHistory.map((day) => {
+            if (day.date === req.body.today) {
+                return {
+                    ...day,
+                    food: updatedFood,
+                };
+            }
+            return day;
+        });
+
+        const jsonUpdatedHistory = JSON.stringify(updatedHistory);
+
+        await db.execute("UPDATE users SET history = ? WHERE id = ?", [
+            jsonUpdatedHistory,
+            req.decodedUser.userId,
+        ]);
+
+        res.sendStatus(200);
     } catch (error) {
         res.sendStatus(400);
         console.log(error);

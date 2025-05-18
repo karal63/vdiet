@@ -48,7 +48,6 @@ const saveMeal = () => {
         },
     ];
     foodStore.isControlWindowOpen = false;
-    console.log(globalStore.currentDay.food);
 };
 </script>
 

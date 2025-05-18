@@ -13,11 +13,10 @@ const props = defineProps<{
 const areDetailsOpen = ref(false);
 
 const showDetails = () => {
-    // change to id, when it will exist
-    if (store.openedMealDetailsId === props.singleMeal.name) {
-        return (store.openedMealDetailsId = null);
+    if (store.openedMealDetailsId === props.singleMeal.id) {
+        return (store.openedMealDetailsId = "");
     }
-    store.openedMealDetailsId = props.singleMeal.name;
+    store.openedMealDetailsId = props.singleMeal.id ?? null;
 };
 </script>
 
@@ -35,6 +34,9 @@ const showDetails = () => {
             <ul class="flex gap-7 items-center">
                 <li class="flex-center">
                     <button
+                        @click="
+                            singleMeal.id && store.deleteFood(singleMeal.id)
+                        "
                         class="text-xl text-secondary cursor-pointer hover:text-avocado-600 transition-all"
                     >
                         <Icon icon="mingcute:delete-line" />
@@ -52,7 +54,7 @@ const showDetails = () => {
                         @click="showDetails"
                         class="text-3xl cursor-pointer transform transition-transform duration-300"
                         :class="
-                            store.openedMealDetailsId === props.singleMeal.name
+                            store.openedMealDetailsId === props.singleMeal.id
                                 ? 'rotate-180'
                                 : ''
                         "
@@ -66,7 +68,7 @@ const showDetails = () => {
         <div
             class="transition-all rounded-xl overflow-hidden"
             :class="
-                store.openedMealDetailsId === props.singleMeal.name
+                store.openedMealDetailsId === props.singleMeal.id
                     ? 'h-[50px] '
                     : 'h-0'
             "

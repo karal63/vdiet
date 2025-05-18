@@ -1,12 +1,17 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { Meal } from "../types/global";
+import axios from "axios";
+import { useGlobalStore } from "./globalStore";
+
+axios.defaults.withCredentials = true;
 
 export const useFoodStore = defineStore("foodStore", () => {
+    const globalStore = useGlobalStore();
+
     const meals = ref<Meal[]>([]);
     const openedMealId = ref<number | null>(null);
 
-    // change to id | number when you create id for food
     const openedMealDetailsId = ref<string | null>("");
 
     const isControlWindowOpen = ref(false);
@@ -21,6 +26,14 @@ export const useFoodStore = defineStore("foodStore", () => {
         document.body.classList.remove("overflow-y-hidden");
     };
 
+    const deleteFood = async (id: string) => {
+        const today = new Date().toISOString().split("T")[0];
+        await axios.delete("http://localhost:5000/users/history", {
+            data: { today, id },
+        });
+        globalStore.getDay();
+    };
+
     return {
         meals,
         openedMealId,
@@ -28,5 +41,6 @@ export const useFoodStore = defineStore("foodStore", () => {
         showControlWindow,
         hideControlWindow,
         openedMealDetailsId,
+        deleteFood,
     };
 });

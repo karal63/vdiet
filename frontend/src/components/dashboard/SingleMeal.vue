@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
-import type { Meal } from "../../types/global";
 import { useGlobalStore } from "../../stores/globalStore";
 import SingleMealDetails from "./SingleMealDetails.vue";
 
