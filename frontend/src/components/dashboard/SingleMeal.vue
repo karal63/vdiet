@@ -51,7 +51,7 @@ watch(
                 class="transition-all"
                 :class="
                     meal.id === foodStore.openedMealId
-                        ? 'h-[200px] mt-5'
+                        ? 'h-[300px] mt-5'
                         : 'h-0'
                 "
             >

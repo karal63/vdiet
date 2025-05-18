@@ -12,7 +12,7 @@ const profileMenuOpen = ref(false);
 
 <template>
     <div
-        class="absolute left-3 top-0 h-full w-[70px] bg-mainLightBg flex items-center"
+        class="fixed left-3 top-0 h-full w-[70px] bg-mainLightBg flex items-center"
     >
         <div
             class="relative bg-avocado-100 h-[70%] w-full border border-avocado-300 rounded-full shadow-2xl"

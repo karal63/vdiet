@@ -10,7 +10,7 @@ const globalStore = useGlobalStore();
 
 const meal = ref({
     name: "",
-    category: "",
+    category: "Uncategorized",
     portion: 0,
     calories: 0,
     macronutrients: {
@@ -41,10 +41,6 @@ const saveMeal = () => {
     globalStore.currentDay.food = [...globalStore.currentDay.food, meal.value];
     foodStore.isControlWindowOpen = false;
 };
-
-watchEffect(() => {
-    console.log(meal.value.category);
-});
 </script>
 
 <template>
@@ -79,7 +75,7 @@ watchEffect(() => {
                 <option
                     v-for="mealTime in mealsPlan"
                     :value="mealTime.type"
-                    selected
+                    :key="mealTime.type"
                 >
                     {{ mealTime.type }}
                 </option>
@@ -128,10 +124,10 @@ watchEffect(() => {
         </button>
 
         <button
-            @click="cancelMeal"
+            @click.prevent="cancelMeal"
             class="mt-2 flex-center w-full border border-mainBorder h-[40px] font-semibold rounded-lg cursor-pointer hover:bg-avocado-100 transition-all"
         >
-            Add macronutrients
+            Cancel
         </button>
     </form>
 </template>

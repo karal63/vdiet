@@ -7,7 +7,7 @@ const store = useGlobalStore();
 
 <template>
     <div
-        class="absolute left-[120%] bottom-0 border border-mainBorder w-[200px] rounded-xl shadow-2xl"
+        class="absolute bg-white left-[120%] bottom-0 border border-mainBorder w-[200px] rounded-xl shadow-2xl"
     >
         <ul class="">
             <li>
