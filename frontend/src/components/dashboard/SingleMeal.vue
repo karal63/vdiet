@@ -28,12 +28,12 @@ const filteredMeals = computed(() => {
 </script>
 
 <template>
-    <div class="rounded-xl py-2">
+    <div class="rounded-xl pb-2">
         <button
             @click="showDetails"
-            class="flex justify-between w-full cursor-pointer px-7"
+            class="flex justify-between w-full cursor-pointer px-7 pt-2"
         >
-            <h1 class="text-lg w-[150px] text-left">{{ meal.type }}</h1>
+            <h1 class="text-lg text-left">{{ meal.type }}</h1>
 
             <div class="flex justify-center items-center">
                 <button
@@ -49,10 +49,10 @@ const filteredMeals = computed(() => {
 
         <div
             class="transition-all px-7 overflow-hidden h-0"
-            :class="meal.id === foodStore.openedMealId ? `mt-5` : ''"
+            :class="meal.id === foodStore.openedMealId ? `mt-2` : ''"
             :style="`height: ${
                 meal.id === foodStore.openedMealId
-                    ? (filteredMeals?.length || 0) * 50
+                    ? (filteredMeals?.length || 0) * 60
                     : ''
             }px`"
         >

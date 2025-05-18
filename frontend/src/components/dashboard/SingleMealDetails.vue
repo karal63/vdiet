@@ -2,26 +2,37 @@
 import { Icon } from "@iconify/vue";
 import type { Meal } from "../../types/global";
 import { ref } from "vue";
+import { useFoodStore } from "../../stores/foodStore";
+
+const store = useFoodStore();
 
 const props = defineProps<{
     singleMeal: Meal;
 }>();
 
 const areDetailsOpen = ref(false);
+
+const showDetails = () => {
+    // change to id, when it will exist
+    if (store.openedMealDetailsId === props.singleMeal.name) {
+        return (store.openedMealDetailsId = null);
+    }
+    store.openedMealDetailsId = props.singleMeal.name;
+};
+
+console.log(props.singleMeal);
 </script>
 
 <template>
-    <div class="py-2">
-        <button
-            @click="areDetailsOpen = !areDetailsOpen"
-            class="w-full flex justify-between items-center cursor-pointer"
-        >
-            <h3
-                class="transition-all"
+    <div class="py-1">
+        <div class="w-full flex items-center cursor-pointer">
+            <button
+                @click="showDetails"
+                class="transition-all w-full text-left cursor-pointer"
                 :class="areDetailsOpen ? 'font-semibold' : ''"
             >
                 {{ singleMeal.name }}
-            </h3>
+            </button>
 
             <ul class="flex gap-7 items-center">
                 <li class="flex-center">
@@ -40,20 +51,29 @@ const areDetailsOpen = ref(false);
                 </li>
                 <li class="flex-center">
                     <button
+                        @click="showDetails"
                         class="text-3xl cursor-pointer transform transition-transform duration-300"
-                        :class="areDetailsOpen ? 'rotate-180' : ''"
+                        :class="
+                            store.openedMealDetailsId === props.singleMeal.name
+                                ? 'rotate-180'
+                                : ''
+                        "
                     >
                         <Icon icon="iconamoon:arrow-down-2-thin" />
                     </button>
                 </li>
             </ul>
-        </button>
+        </div>
 
         <div
             class="transition-all rounded-xl overflow-hidden"
-            :class="areDetailsOpen ? 'h-[100px] ' : 'h-0'"
+            :class="
+                store.openedMealDetailsId === props.singleMeal.name
+                    ? 'h-[50px] '
+                    : 'h-0'
+            "
         >
-            <ul class="grid grid-cols-3">
+            <ul class="grid grid-cols-3 max-w-max">
                 <li class="text-secondary">
                     Calories: {{ props.singleMeal.calories }}kcal
                 </li>

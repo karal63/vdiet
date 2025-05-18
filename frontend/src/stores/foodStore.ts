@@ -6,6 +6,9 @@ export const useFoodStore = defineStore("foodStore", () => {
     const meals = ref<Meal[]>([]);
     const openedMealId = ref<number | null>(null);
 
+    // change to id | number when you create id for food
+    const openedMealDetailsId = ref<string | null>("");
+
     const isControlWindowOpen = ref(false);
 
     const showControlWindow = () => {
@@ -24,5 +27,6 @@ export const useFoodStore = defineStore("foodStore", () => {
         isControlWindowOpen,
         showControlWindow,
         hideControlWindow,
+        openedMealDetailsId,
     };
 });
