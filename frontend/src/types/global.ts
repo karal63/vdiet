@@ -31,3 +31,7 @@ export type Day = {
     date: string;
     food: Meal[];
 };
+
+export type ProfileMenuExposed = {
+    menuRef: HTMLElement | null;
+};

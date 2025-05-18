@@ -1,12 +1,20 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useGlobalStore } from "../../stores/globalStore";
 import { Icon } from "@iconify/vue";
 
 const store = useGlobalStore();
+
+const menuRef = ref<HTMLElement | null>(null);
+
+defineExpose({
+    menuRef,
+});
 </script>
 
 <template>
     <div
+        ref="menuRef"
         class="absolute bg-white left-[120%] bottom-0 border border-mainBorder w-[200px] rounded-xl shadow-2xl"
     >
         <ul class="">

@@ -3,11 +3,40 @@ import { Icon } from "@iconify/vue";
 import { RouterLink, useRoute } from "vue-router";
 import { sidebarLinks } from "../constants/sidebarLinks";
 import ProfileMenu from "./dashboard/ProfileMenu.vue";
-import { ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
+import type { ProfileMenuExposed } from "../types/global";
 
 const route = useRoute();
 
 const profileMenuOpen = ref(false);
+const menuComponentRef = ref<ProfileMenuExposed | null>(null);
+const buttonRef = ref(null);
+
+const toggleMenu = () => {
+    profileMenuOpen.value = !profileMenuOpen.value;
+};
+
+const handleClickOutside = (e: MouseEvent) => {
+    const menuEl = menuComponentRef.value?.menuRef;
+
+    if (
+        profileMenuOpen.value &&
+        menuEl &&
+        !menuEl.contains(e.target as Node) &&
+        (e.target as Node) !== buttonRef.value
+    ) {
+        console.log(false);
+        profileMenuOpen.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeMount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <template>
@@ -33,8 +62,8 @@ const profileMenuOpen = ref(false);
                         />
                         <Icon
                             v-else
-                            :icon="link.activeIcon"
                             class="px-[4px] rounded-xl text-avocado-700 bg-avocado-200 w-10 h-10 transition-all"
+                            :icon="link.activeIcon"
                         />
 
                         <p class="text-[.8rem] font-medium text-avocado-700">
@@ -53,10 +82,11 @@ const profileMenuOpen = ref(false);
         <!-- profile button -->
         <div class="absolute bottom-4 left-0 w-full flex justify-center">
             <button
-                @click="profileMenuOpen = !profileMenuOpen"
+                ref="buttonRef"
+                @click="toggleMenu"
                 class="w-10 h-10 bg-gradient-to-r from-avocado-200 to-avocado-500 rounded-full cursor-pointer"
             ></button>
-            <ProfileMenu v-if="profileMenuOpen" />
+            <ProfileMenu v-if="profileMenuOpen" ref="menuComponentRef" />
         </div>
     </div>
 </template>
