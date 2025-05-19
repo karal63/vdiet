@@ -78,6 +78,8 @@ export const useGlobalStore = defineStore("global", () => {
     const getDay = async () => {
         console.log("getting day");
         const res = await axios.get("http://localhost:5000/users/history");
+        fullHistory.value = res.data.history;
+
         const today = new Date().toISOString().split("T")[0];
         currentDay.value = res.data.history.find(
             (day: Day) => day.date === today
@@ -97,6 +99,12 @@ export const useGlobalStore = defineStore("global", () => {
         food: [],
     });
 
+    const fullHistory = ref<Day[]>([]);
+
+    const setDay = (date: Date) => {
+        console.log(date);
+    };
+
     return {
         isAuthenticated,
         login,
@@ -113,5 +121,7 @@ export const useGlobalStore = defineStore("global", () => {
         history,
         currentDay,
         updateDay,
+        setDay,
+        fullHistory,
     };
 });
