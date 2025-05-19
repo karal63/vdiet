@@ -183,7 +183,9 @@ router.get("/users/history", verifyKey, async (req, res) => {
             [req.decodedUser.userId]
         );
 
-        res.status(200).json(rows[0]);
+        res.status(200).json({
+            history: JSON.parse(rows[0].history),
+        });
     } catch (error) {
         res.sendStatus(400);
     }
@@ -228,15 +230,11 @@ router.delete("/users/history", verifyKey, async (req, res) => {
 
         const parsedHistory = JSON.parse(rows[0].history);
 
-        const updatedFood = parsedHistory[0].food.filter(
-            (meal) => meal.id !== req.body.id
-        );
-
         const updatedHistory = parsedHistory.map((day) => {
             if (day.date === req.body.today) {
                 return {
                     ...day,
-                    food: updatedFood,
+                    food: day.food.filter((meal) => meal.id !== req.body.id),
                 };
             }
             return day;
@@ -249,7 +247,7 @@ router.delete("/users/history", verifyKey, async (req, res) => {
             req.decodedUser.userId,
         ]);
 
-        res.sendStatus(200);
+        res.status(200).json({ history: updatedHistory });
     } catch (error) {
         res.sendStatus(400);
         console.log(error);

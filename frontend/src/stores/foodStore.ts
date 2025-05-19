@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { Meal } from "../types/global";
+import type { Day, Meal } from "../types/global";
 import axios from "axios";
 import { useGlobalStore } from "./globalStore";
 
@@ -28,10 +28,14 @@ export const useFoodStore = defineStore("foodStore", () => {
 
     const deleteFood = async (id: string) => {
         const today = new Date().toISOString().split("T")[0];
-        await axios.delete("http://localhost:5000/users/history", {
+        const res = await axios.delete("http://localhost:5000/users/history", {
+            headers: { "Content-Type": "application/json" },
             data: { today, id },
         });
-        globalStore.getDay();
+
+        globalStore.currentDay = res.data.history.find(
+            (day: Day) => day.date === today
+        );
     };
 
     return {
