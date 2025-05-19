@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 import SingleMealDetails from "./SingleMealDetails.vue";
@@ -11,6 +11,10 @@ const globalStore = useGlobalStore();
 const props = defineProps<{
     meal: any;
 }>();
+
+const totalCalories = ref(0);
+const totalCarbohydrates = ref(0);
+const totalProtein = ref(0);
 
 const showDetails = () => {
     if (foodStore.openedMealId === props.meal.id) {
@@ -57,7 +61,12 @@ const filteredMeals = computed(() => {
         >
             <ul class="flex flex-col divide-y divide-mainBorder">
                 <li v-for="singleMeal in filteredMeals">
-                    <SingleMealDetails :singleMeal="singleMeal" />
+                    <SingleMealDetails
+                        :singleMeal="singleMeal"
+                        @updateCalories="totalCalories += $event"
+                        @updateCarbohydrates="totalCarbohydrates += $event"
+                        @updateProtein="totalProtein += $event"
+                    />
                 </li>
             </ul>
         </div>
@@ -68,8 +77,22 @@ const filteredMeals = computed(() => {
                 >Total:</span
             >
             <ul class="flex gap-4">
-                <li>Protein: 25g</li>
-                <li>Carbs: 40g</li>
+                <li>
+                    Calories:
+                    <span class="text-avocado-600"
+                        >{{ totalCalories }}kcal</span
+                    >
+                </li>
+                <li>
+                    Carbohydrates:
+                    <span class="text-avocado-600"
+                        >{{ totalCarbohydrates }}g</span
+                    >
+                </li>
+                <li>
+                    Protein:
+                    <span class="text-avocado-600">{{ totalProtein }}g</span>
+                </li>
             </ul>
         </div>
     </div>

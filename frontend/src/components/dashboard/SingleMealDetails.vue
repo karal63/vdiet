@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { Meal } from "../../types/global";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 
 const store = useFoodStore();
@@ -9,6 +9,18 @@ const store = useFoodStore();
 const props = defineProps<{
     singleMeal: Meal;
 }>();
+
+const emit = defineEmits<{
+    (event: "updateCalories", calories: number): void;
+    (event: "updateCarbohydrates", carbohydrates: number): void;
+    (event: "updateProtein", protein: number): void;
+}>();
+
+onMounted(() => {
+    emit("updateCalories", props.singleMeal.calories);
+    emit("updateCarbohydrates", props.singleMeal.macronutrients.carbohydrates);
+    emit("updateProtein", props.singleMeal.macronutrients.protein);
+});
 
 const areDetailsOpen = ref(false);
 
