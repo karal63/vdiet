@@ -94,7 +94,7 @@ export const useGlobalStore = defineStore("global", () => {
         });
     };
 
-    const currentDay = ref<Day>({
+    const currentDay = ref<Day | undefined>({
         date: "",
         food: [],
     });
@@ -103,6 +103,9 @@ export const useGlobalStore = defineStore("global", () => {
 
     const setDay = (date: Date) => {
         console.log(date);
+        // do smth with it
+        // when you navigate you may lose data
+        // if you navigate and change data they are not being stored in db
     };
 
     return {

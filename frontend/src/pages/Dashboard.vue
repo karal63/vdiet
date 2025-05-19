@@ -5,7 +5,7 @@ import FoodControlWindow from "../components/dashboard/FoodControlWindow.vue";
 import FoodSection from "../components/dashboard/FoodSection.vue";
 import { useFoodStore } from "../stores/foodStore";
 import { useGlobalStore } from "../stores/globalStore";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Day } from "../types/global";
 
 const globalStore = useGlobalStore();
@@ -17,13 +17,29 @@ const navigateToDate = (dayValue: number) => {
     const newDate = new Date(currentDate.value);
     newDate.setDate(newDate.getDate() + dayValue);
 
-    currentDate.value = newDate;
-
     const formatted = newDate.toISOString().split("T")[0];
-    globalStore.currentDay = globalStore.fullHistory.find(
+
+    const matchingDay = globalStore.fullHistory.find(
         (day: Day) => day.date === formatted
     );
+
+    if (matchingDay) {
+        currentDate.value = newDate;
+        globalStore.currentDay = matchingDay;
+    }
 };
+
+const formattedDate = computed(() => {
+    const parts = currentDate.value
+        .toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        })
+        .split(" ");
+
+    return `${parts[0]} ${parts[1]}, ${parts[2]}`;
+});
 </script>
 
 <template>
@@ -47,7 +63,7 @@ const navigateToDate = (dayValue: number) => {
                     <Icon icon="ep:arrow-left-bold" />
                 </button>
                 <h1 class="text-lg">
-                    {{ currentDate.toISOString().split("T")[0] }}
+                    {{ formattedDate }}
                 </h1>
                 <button
                     @click="() => navigateToDate(1)"
