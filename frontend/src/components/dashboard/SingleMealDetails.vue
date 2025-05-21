@@ -3,8 +3,10 @@ import { Icon } from "@iconify/vue";
 import type { Meal } from "../../types/global";
 import { onMounted, ref } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
+import { useGlobalStore } from "../../stores/globalStore";
 
-const store = useFoodStore();
+const foodStore = useFoodStore();
+const globalStore = useGlobalStore();
 
 const props = defineProps<{
     singleMeal: Meal;
@@ -25,10 +27,18 @@ onMounted(() => {
 const areDetailsOpen = ref(false);
 
 const showDetails = () => {
-    if (store.openedMealDetailsId === props.singleMeal.id) {
-        return (store.openedMealDetailsId = "");
+    if (foodStore.openedMealDetailsId === props.singleMeal.id) {
+        return (foodStore.openedMealDetailsId = "");
     }
-    store.openedMealDetailsId = props.singleMeal.id ?? null;
+    foodStore.openedMealDetailsId = props.singleMeal.id ?? null;
+};
+
+const currentDate = new Date().toISOString().split("T")[0];
+const isCreatingAllowed = () => {
+    if (currentDate !== globalStore.currentDay?.date) {
+        return false;
+    }
+    return true;
 };
 </script>
 
@@ -44,17 +54,17 @@ const showDetails = () => {
             </button>
 
             <ul class="flex gap-7 items-center">
-                <li class="flex-center">
+                <li v-if="isCreatingAllowed()" class="flex-center">
                     <button
                         @click="
-                            singleMeal.id && store.deleteFood(singleMeal.id)
+                            singleMeal.id && foodStore.deleteFood(singleMeal.id)
                         "
                         class="text-xl text-secondary cursor-pointer hover:text-avocado-600 transition-all"
                     >
                         <Icon icon="mingcute:delete-line" />
                     </button>
                 </li>
-                <li class="flex-center">
+                <li v-if="isCreatingAllowed()" class="flex-center">
                     <button
                         class="text-xl text-secondary cursor-pointer hover:text-avocado-600 transition-all"
                     >
@@ -66,7 +76,8 @@ const showDetails = () => {
                         @click="showDetails"
                         class="text-3xl cursor-pointer transform transition-transform duration-300"
                         :class="
-                            store.openedMealDetailsId === props.singleMeal.id
+                            foodStore.openedMealDetailsId ===
+                            props.singleMeal.id
                                 ? 'rotate-180'
                                 : ''
                         "
@@ -80,7 +91,7 @@ const showDetails = () => {
         <div
             class="transition-all rounded-xl overflow-hidden"
             :class="
-                store.openedMealDetailsId === props.singleMeal.id
+                foodStore.openedMealDetailsId === props.singleMeal.id
                     ? 'h-[50px] '
                     : 'h-0'
             "

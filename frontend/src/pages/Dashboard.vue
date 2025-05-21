@@ -5,7 +5,7 @@ import FoodControlWindow from "../components/dashboard/FoodControlWindow.vue";
 import FoodSection from "../components/dashboard/FoodSection.vue";
 import { useFoodStore } from "../stores/foodStore";
 import { useGlobalStore } from "../stores/globalStore";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import type { Day } from "../types/global";
 
 const globalStore = useGlobalStore();
@@ -60,7 +60,7 @@ const formattedDate = computed(() => {
                     @click="() => navigateToDate(-1)"
                     class="text-avocado-600 cursor-pointer text-3xl"
                 >
-                    <Icon icon="ep:arrow-left-bold" />
+                    <Icon icon="ep:arrow-left" />
                 </button>
                 <h1 class="text-lg">
                     {{ formattedDate }}
@@ -69,7 +69,7 @@ const formattedDate = computed(() => {
                     @click="() => navigateToDate(1)"
                     class="text-avocado-600 cursor-pointer text-3xl"
                 >
-                    <Icon icon="ep:arrow-right-bold" />
+                    <Icon icon="ep:arrow-right" />
                 </button>
             </div>
         </div>

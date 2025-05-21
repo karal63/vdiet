@@ -101,13 +101,6 @@ export const useGlobalStore = defineStore("global", () => {
 
     const fullHistory = ref<Day[]>([]);
 
-    const setDay = (date: Date) => {
-        console.log(date);
-        // do smth with it
-        // when you navigate you may lose data
-        // if you navigate and change data they are not being stored in db
-    };
-
     return {
         isAuthenticated,
         login,
@@ -124,7 +117,6 @@ export const useGlobalStore = defineStore("global", () => {
         history,
         currentDay,
         updateDay,
-        setDay,
         fullHistory,
     };
 });

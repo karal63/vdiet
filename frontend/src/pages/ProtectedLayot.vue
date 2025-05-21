@@ -23,8 +23,13 @@ onMounted(() => {
 watch(
     () => globalStore.currentDay,
     () => {
-        console.log("updating meals in database");
-        globalStore.updateDay(globalStore.currentDay);
+        if (
+            new Date().toISOString().split("T")[0] ===
+            globalStore.currentDay?.date
+        ) {
+            console.log("updating meals in database");
+            globalStore.updateDay(globalStore.currentDay);
+        }
     },
     { deep: true }
 );
