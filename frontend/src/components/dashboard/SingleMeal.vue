@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 import SingleMealDetails from "./SingleMealDetails.vue";
@@ -24,9 +24,13 @@ const showDetails = () => {
 };
 
 const filteredMeals = computed(() => {
-    return globalStore.currentDay.food.filter(
+    return globalStore.currentDay?.food.filter(
         (filteredMeal) => filteredMeal.category === props.meal.type
     );
+});
+
+watchEffect(() => {
+    console.log(globalStore.currentDay);
 });
 </script>
 

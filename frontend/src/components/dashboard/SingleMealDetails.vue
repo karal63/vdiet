@@ -92,20 +92,29 @@ const isCreatingAllowed = () => {
             class="transition-all rounded-xl overflow-hidden"
             :class="
                 foodStore.openedMealDetailsId === props.singleMeal.id
-                    ? 'h-[50px] '
+                    ? 'h-[30px]'
                     : 'h-0'
             "
         >
-            <ul class="grid grid-cols-3 max-w-max">
+            <ul class="flex items-center gap-3 h-full">
                 <li class="text-secondary">
                     Calories: {{ props.singleMeal.calories }}kcal
                 </li>
+
+                <div class="w-[1px] h-full bg-mainBorder"></div>
+
                 <li class="text-secondary">
                     Portion: {{ props.singleMeal.portion }}g
                 </li>
+
+                <div class="w-[1px] h-full bg-mainBorder"></div>
+
                 <li class="text-secondary">
                     Protein: {{ props.singleMeal.macronutrients.protein }}g
                 </li>
+
+                <div class="w-[1px] h-full bg-mainBorder"></div>
+
                 <li class="text-secondary">
                     Carbohydrates:
                     {{ props.singleMeal.macronutrients.carbohydrates }}g
