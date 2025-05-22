@@ -28,18 +28,20 @@ onUnmounted(() => {
         ref="modalRef"
         class="fixed left-0 top-0 w-full h-full flex items-center justify-center bg-black/50 z-30"
     >
-        <div class="w-[70%] h-[75%] flex gap-2">
-            <div class="bg-white shadow-2xl rounded-3xl w-full px-8 py-6">
-                <h1 class="text-3xl font-semibold">Drafting a new meal</h1>
+        <div class="flex gap-2">
+            <div
+                class="bg-white rounded-xl w-full px-8 pt-6 pb-8 shadow-mainShadow"
+            >
+                <h1 class="text-3xl font-semibold">New meal</h1>
 
-                <div class="flex gap-5">
-                    <div class="w-1/2">
+                <div class="flex gap-5 mt-7">
+                    <div class="w-full">
                         <MealForm />
                     </div>
 
-                    <div class="w-1/2">
+                    <!-- <div class="w-1/2">
                         <SearchMeal />
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

@@ -25,6 +25,9 @@
     --color-mainBorder: #d1d5dc;
     --color-grayDull: #4a5565;
     --color-secondary: #666666;
+    --shadow-mainShadow: 0 0 20px rgba(0, 0, 0, 0.3);
+
+    /* --color box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); */
 }
 
 .flex-center {
