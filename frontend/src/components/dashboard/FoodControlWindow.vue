@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { useFoodStore } from "../../stores/foodStore";
-import SearchMeal from "./SearchMeal.vue";
 import MealForm from "./MealForm.vue";
 import { onMounted, onUnmounted, useTemplateRef } from "vue";
 
@@ -38,10 +37,6 @@ onUnmounted(() => {
                     <div class="w-full">
                         <MealForm />
                     </div>
-
-                    <!-- <div class="w-1/2">
-                        <SearchMeal />
-                    </div> -->
                 </div>
             </div>
 

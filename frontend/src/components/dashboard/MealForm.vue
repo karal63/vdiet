@@ -23,26 +23,12 @@ const meal = ref<Meal>({
 });
 const areDetailsOpen = ref(false);
 const selectedDetail = ref<string | null>(null); // add type
+const newValue = ref(0);
 
-// const clearMeal = () => {
-//     meal.value = {
-//         name: "",
-//         category: "",
-//         portion: 0,
-//         calories: 0,
-//         macronutrients: {
-//             protein: 0,
-//             carbohydrates: 0,
-//         },
-//     };
-// };
-
-// const cancelMeal = () => {
-//     clearMeal();
-//     foodStore.isControlWindowOpen = false;
-// };
-
+// fix ts error
 const saveMeal = () => {
+    if (!globalStore.currentDay) return;
+
     globalStore.currentDay.food = [
         ...globalStore.currentDay.food,
         {
@@ -51,6 +37,20 @@ const saveMeal = () => {
         },
     ];
     foodStore.isControlWindowOpen = false;
+};
+
+const addDetail = () => {
+    if (selectedDetail.value === "Portion") {
+        meal.value.portion = newValue.value;
+    } else if (selectedDetail.value === "Calories") {
+        meal.value.calories = newValue.value;
+    } else if (selectedDetail.value === "Protein") {
+        meal.value.macronutrients.protein = newValue.value;
+    } else if (selectedDetail.value === "Carbs") {
+        meal.value.macronutrients.carbohydrates = newValue.value;
+    }
+
+    newValue.value = 0;
 };
 
 watchEffect(() => {
@@ -90,27 +90,50 @@ watchEffect(() => {
 
         <div class="mt-5">
             <label class="mb-1 text-secondary">Details</label>
-            <div class="flex justify-between items-center mt-2">
+
+            <ul class="mt-2 grid grid-cols-2 gap-1">
+                <li class="bg-gray-200 px-3 py-1 rounded-md">
+                    Portion: {{ meal.portion }}
+                </li>
+                <li class="bg-gray-200 px-3 py-1 rounded-md">
+                    Calories: {{ meal.calories }}g
+                </li>
+                <li class="bg-gray-200 px-3 py-1 rounded-md">
+                    Protein: {{ meal.macronutrients.protein }}g
+                </li>
+                <li class="bg-gray-200 px-3 py-1 rounded-md">
+                    Carbohydrates: {{ meal.macronutrients.carbohydrates }}g
+                </li>
+            </ul>
+
+            <div
+                class="flex justify-between items-center"
+                :class="selectedDetail ? 'mt-5' : 'mt-2'"
+            >
                 <button
                     @click.prevent="areDetailsOpen = !areDetailsOpen"
-                    class="w-8 h-8 bg-avocado-200/70 rounded-full flex-center cursor-pointer text-secondary hover:bg-avocado-200 transition-all hover:text-black"
+                    class="rounded-full flex-center gap-1 cursor-pointer hover:text-avocado-600 transition-all"
                 >
-                    <Icon
-                        icon="material-symbols:add-rounded"
-                        class="text-2xl"
-                    />
+                    <Icon icon="material-symbols:edit-outline-rounded" />
+                    {{ areDetailsOpen ? "Close" : "Edit" }}
                 </button>
 
                 <div v-if="selectedDetail" class="flex items-center gap-2">
                     {{ selectedDetail }}:
-                    <input
-                        type="number"
-                        class="border border-mainBorder px-2 h-[38px] w-[90px] rounded-md outline-avocado-300 text-lg"
-                    />
+                    <div class="flex items-center">
+                        <input
+                            v-model="newValue"
+                            type="number"
+                            class="border border-mainBorder px-2 h-[38px] w-[90px] rounded-tl-md rounded-bl-md outline-avocado-300 text-lg"
+                        />
+                        <button
+                            @click.prevent="addDetail"
+                            class="bg-avocado-500 text-white px-2 h-[38px] rounded-tr-md rounded-br-md cursor-pointer"
+                        >
+                            Add
+                        </button>
+                    </div>
                 </div>
-
-                <!-- when you click button, entering value elements appears -->
-                <!-- value in the button is synced with number field -->
             </div>
 
             <div
