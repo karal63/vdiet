@@ -46,6 +46,11 @@ const isCreatingAllowed = () => {
     }
     return true;
 };
+
+const setEditingMeal = () => {
+    foodStore.setControlWindow(true, "Edit");
+    foodStore.editingMeal = { ...props.singleMeal };
+};
 </script>
 
 <template>
@@ -72,6 +77,7 @@ const isCreatingAllowed = () => {
                 </li>
                 <li v-if="isCreatingAllowed()" class="flex-center">
                     <button
+                        @click="setEditingMeal"
                         class="text-xl text-secondary cursor-pointer hover:text-avocado-600 transition-all"
                     >
                         <Icon icon="material-symbols:edit-outline-rounded" />

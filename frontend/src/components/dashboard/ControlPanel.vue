@@ -7,7 +7,7 @@ const foodStore = useFoodStore();
 const globalStore = useGlobalStore();
 
 const handleClick = () => {
-    foodStore.showControlWindow();
+    foodStore.setControlWindow(true, "Create");
 };
 
 const currentDate = new Date().toISOString().split("T")[0];

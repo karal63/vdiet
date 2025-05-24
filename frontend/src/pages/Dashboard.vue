@@ -80,6 +80,6 @@ const formattedDate = computed(() => {
 
         <FoodSection />
         <ControlPanel />
-        <FoodControlWindow v-if="foodStore.isControlWindowOpen" />
+        <FoodControlWindow />
     </div>
 </template>

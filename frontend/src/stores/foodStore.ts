@@ -14,15 +14,23 @@ export const useFoodStore = defineStore("foodStore", () => {
 
     const openedMealDetailsId = ref<string | null>("");
 
-    const isControlWindowOpen = ref(false);
+    const controlWindow = ref({
+        isOpen: false,
+        mode: "create",
+    });
 
-    const showControlWindow = () => {
-        isControlWindowOpen.value = true;
-        document.body.classList.add("overflow-y-hidden");
+    const setControlWindow = (
+        isOpen: boolean,
+        mode: "Edit" | "Create" | ""
+    ) => {
+        controlWindow.value = {
+            isOpen,
+            mode,
+        };
     };
 
     const hideControlWindow = () => {
-        isControlWindowOpen.value = false;
+        controlWindow.value.isOpen = false;
         document.body.classList.remove("overflow-y-hidden");
     };
 
@@ -38,13 +46,34 @@ export const useFoodStore = defineStore("foodStore", () => {
         );
     };
 
+    const editingMeal = ref<Meal | null>();
+
+    const editFood = (updatedMeal: Meal) => {
+        if (!globalStore.currentDay) return;
+
+        const updatedFood = globalStore.currentDay.food.map((meal) => {
+            if (meal.id === editingMeal.value?.id) {
+                return {
+                    id: meal.id,
+                    ...updatedMeal,
+                };
+            }
+            return meal;
+        });
+
+        globalStore.currentDay.food = updatedFood;
+        editingMeal.value = null;
+    };
+
     return {
         meals,
         openedMealId,
-        isControlWindowOpen,
-        showControlWindow,
+        controlWindow,
         hideControlWindow,
         openedMealDetailsId,
         deleteFood,
+        setControlWindow,
+        editFood,
+        editingMeal,
     };
 });

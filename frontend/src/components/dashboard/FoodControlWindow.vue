@@ -24,6 +24,7 @@ onUnmounted(() => {
 
 <template>
     <div
+        v-if="store.controlWindow.isOpen"
         ref="modalRef"
         class="fixed left-0 top-0 w-full h-full flex items-center justify-center bg-black/50 z-30"
     >
@@ -31,7 +32,9 @@ onUnmounted(() => {
             <div
                 class="bg-white rounded-xl w-full px-8 pt-6 pb-8 shadow-mainShadow"
             >
-                <h1 class="text-3xl font-semibold">New meal</h1>
+                <h1 class="text-3xl font-semibold">
+                    {{ store.controlWindow.mode }} meal
+                </h1>
 
                 <div class="flex gap-5 mt-7">
                     <div class="w-full">

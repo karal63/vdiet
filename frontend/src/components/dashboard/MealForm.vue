@@ -11,16 +11,19 @@ import { mealDetails } from "../../constants/mealDetails";
 const foodStore = useFoodStore();
 const globalStore = useGlobalStore();
 
-const meal = ref<Meal>({
-    name: "",
-    category: "Uncategorized",
-    portion: 0,
-    calories: 0,
-    macronutrients: {
-        protein: 0,
-        carbohydrates: 0,
-    },
-});
+const meal = ref<Meal>(
+    foodStore.editingMeal || {
+        name: "",
+        category: "Uncategorized",
+        portion: 0,
+        calories: 0,
+        macronutrients: {
+            protein: 0,
+            carbohydrates: 0,
+        },
+    }
+);
+
 const areDetailsOpen = ref(false);
 const selectedDetail = ref<string | null>(null); // add type
 const newValue = ref(0);
@@ -29,14 +32,19 @@ const newValue = ref(0);
 const saveMeal = () => {
     if (!globalStore.currentDay) return;
 
-    globalStore.currentDay.food = [
-        ...globalStore.currentDay.food,
-        {
-            ...meal.value,
-            id: uuidv4(),
-        },
-    ];
-    foodStore.isControlWindowOpen = false;
+    if (foodStore.controlWindow.mode === "Create") {
+        globalStore.currentDay.food = [
+            ...globalStore.currentDay.food,
+            {
+                ...meal.value,
+                id: uuidv4(),
+            },
+        ];
+    } else {
+        foodStore.editFood(meal.value);
+    }
+
+    foodStore.setControlWindow(false, "");
 };
 
 const addDetail = () => {
@@ -161,61 +169,11 @@ watchEffect(() => {
             </div>
         </div>
 
-        <!-- <div class="flex flex-col mt-2">
-            <label class="mb-1 text-secondary">Portion (g)</label>
-            <input
-                v-model="meal.portion"
-                type="number"
-                class="border border-mainBorder px-3 h-[38px] rounded-xl outline-avocado-300 text-lg"
-            />
-        </div>
-
-        <div class="mt-5 flex items-center gap-3">
-            <label class="text-secondary">Calories (kcal) / 100g: </label>
-            <input
-                v-model="meal.calories"
-                type="number"
-                class="border w-20 border-mainBorder px-3 py-1 rounded-xl outline-avocado-300 text-lg"
-                placeholder="12g"
-            />
-        </div>
-
-        <h2 class="mt-4 text-secondary mb-0 font-semibold">Macronutrients:</h2>
-
-        <div class="flex-col gap-2">
-            <div class="flex items-center gap-3">
-                <label class="text-secondary">Protein (g) / 100g: </label>
-                <input
-                    v-model="meal.macronutrients.protein"
-                    type="number"
-                    class="border w-20 border-mainBorder px-3 py-1 rounded-xl outline-avocado-300 text-lg"
-                    placeholder="12g"
-                />
-            </div>
-
-            <div class="flex items-center gap-3">
-                <label class="text-secondary">Carbohydrates (g) / 100g: </label>
-                <input
-                    v-model="meal.macronutrients.carbohydrates"
-                    type="number"
-                    class="border w-20 border-mainBorder px-3 py-1 rounded-xl outline-avocado-300 text-lg"
-                    placeholder="12g"
-                />
-            </div>
-        </div> -->
-
         <button
             class="mt-10 flex-center w-full bg-avocado-500 text-white h-[40px] font-semibold rounded-lg cursor-pointer hover:bg-avocado-600 transition-all"
         >
             <Icon icon="material-symbols:add-rounded" class="text-3xl" />
-            Add meal
+            {{ foodStore.controlWindow.mode }} meal
         </button>
-
-        <!-- <button
-            @click.prevent="cancelMeal"
-            class="mt-2 flex-center w-full border border-mainBorder h-[40px] font-semibold rounded-lg cursor-pointer hover:bg-avocado-100 transition-all"
-        >
-            Cancel
-        </button> -->
     </form>
 </template>
