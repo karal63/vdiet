@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 import SingleMealDetails from "./SingleMealDetails.vue";
@@ -30,19 +30,11 @@ const resetTotal = () => {
 };
 
 const filteredMeals = computed(() => {
+    resetTotal();
     return globalStore.currentDay?.food.filter(
         (filteredMeal) => filteredMeal.category === props.meal.type
     );
 });
-
-// for checking current day
-watch(
-    () => globalStore.currentDay,
-    () => {
-        resetTotal();
-        console.log("resetting");
-    }
-);
 </script>
 
 <template>
@@ -75,7 +67,7 @@ watch(
             }px`"
         >
             <ul class="flex flex-col divide-y divide-mainBorder">
-                <li v-for="singleMeal in filteredMeals">
+                <li v-for="singleMeal in filteredMeals" :key="singleMeal.id">
                     <SingleMealDetails
                         :singleMeal="singleMeal"
                         @updateCalories="totalCalories += $event"

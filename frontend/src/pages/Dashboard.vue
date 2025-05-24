@@ -15,8 +15,8 @@ const currentDate = ref(new Date());
 
 const navigateToDate = (dayValue: number) => {
     const newDate = new Date(currentDate.value);
-    newDate.setDate(newDate.getDate() + dayValue);
 
+    newDate.setDate(newDate.getDate() + dayValue);
     const formatted = newDate.toISOString().split("T")[0];
 
     const matchingDay = globalStore.fullHistory.find(

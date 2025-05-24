@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { Meal } from "../../types/global";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 
@@ -18,6 +18,12 @@ const emit = defineEmits<{
     (event: "updateProtein", protein: number): void;
 }>();
 
+// when the date is today, it doesnt mount and update values in total
+// the problem is that single meal generates multiple food, when page is loaded everything is visible as expected
+// but when i navigate back i already can see that for some food function or rerender didnt even work,
+// because of this emits are not being called and global total is not being updated
+// you need to do something that will rerender all of food when currentDay changes
+// it may help with missed rerendering
 onMounted(() => {
     emit("updateCalories", props.singleMeal.calories);
     emit("updateCarbohydrates", props.singleMeal.macronutrients.carbohydrates);
