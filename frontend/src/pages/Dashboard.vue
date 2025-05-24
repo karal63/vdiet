@@ -11,6 +11,8 @@ import type { Day } from "../types/global";
 const globalStore = useGlobalStore();
 const foodStore = useFoodStore();
 
+const globalCurrentDate = ref(new Date());
+
 const currentDate = ref(new Date());
 
 const navigateToDate = (dayValue: number) => {
@@ -19,14 +21,16 @@ const navigateToDate = (dayValue: number) => {
     newDate.setDate(newDate.getDate() + dayValue);
     const formatted = newDate.toISOString().split("T")[0];
 
+    if (newDate > globalCurrentDate.value) {
+        return;
+    }
+
     const matchingDay = globalStore.fullHistory.find(
         (day: Day) => day.date === formatted
     );
 
-    if (matchingDay) {
-        currentDate.value = newDate;
-        globalStore.currentDay = matchingDay;
-    }
+    currentDate.value = newDate;
+    globalStore.currentDay = matchingDay;
 };
 
 const formattedDate = computed(() => {
