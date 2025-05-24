@@ -13,6 +13,10 @@ export const mealsPlan = [
     },
     {
         id: 4,
+        type: "Snacks",
+    },
+    {
+        id: 5,
         type: "Uncategorized",
     },
 ];
