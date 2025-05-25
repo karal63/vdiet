@@ -24,10 +24,15 @@ const emit = defineEmits<{
 // because of this emits are not being called and global total is not being updated
 // you need to do something that will rerender all of food when currentDay changes
 // it may help with missed rerendering
+
 onMounted(() => {
     emit("updateCalories", props.singleMeal.calories);
     emit("updateCarbohydrates", props.singleMeal.macronutrients.carbohydrates);
     emit("updateProtein", props.singleMeal.macronutrients.protein);
+
+    foodStore.calories += props.singleMeal.calories;
+    foodStore.protein += props.singleMeal.macronutrients.protein;
+    foodStore.carbohydrates += props.singleMeal.macronutrients.carbohydrates;
 });
 
 const areDetailsOpen = ref(false);

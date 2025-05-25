@@ -65,6 +65,14 @@ export const useFoodStore = defineStore("foodStore", () => {
         editingMeal.value = null;
     };
 
+    const caloriesGoal = ref(3000);
+    const proteinGoal = ref(156);
+    const carbohydratesGoal = ref(488);
+
+    const calories = ref(0);
+    const protein = ref(0);
+    const carbohydrates = ref(0);
+
     return {
         meals,
         openedMealId,
@@ -75,5 +83,11 @@ export const useFoodStore = defineStore("foodStore", () => {
         setControlWindow,
         editFood,
         editingMeal,
+        calories,
+        protein,
+        carbohydrates,
+        caloriesGoal,
+        proteinGoal,
+        carbohydratesGoal,
     };
 });

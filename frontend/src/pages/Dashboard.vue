@@ -7,6 +7,7 @@ import { useFoodStore } from "../stores/foodStore";
 import { useGlobalStore } from "../stores/globalStore";
 import { computed, onMounted, ref, watch } from "vue";
 import type { Day } from "../types/global";
+import Summary from "../components/dashboard/Summary.vue";
 
 const globalStore = useGlobalStore();
 const foodStore = useFoodStore();
@@ -47,7 +48,7 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-    <div class="pl-[120px] pr-[40px] pt-4 h-[1000px] bg-mainLightBg">
+    <div class="pl-[120px] pr-[40px] pt-4 pb-10 bg-mainLightBg">
         <div v-if="globalStore.isLoading">
             <h1 class="text-4xl bg-purple-500">Loading...</h1>
         </div>
@@ -56,7 +57,6 @@ const formattedDate = computed(() => {
                 <p class="text-3xl font-black">
                     Hello, {{ globalStore.loggedUser?.username }}!
                 </p>
-                <div>cards etc...</div>
             </div>
 
             <div class="flex gap-2 items-center">
@@ -78,6 +78,7 @@ const formattedDate = computed(() => {
             </div>
         </div>
 
+        <Summary />
         <FoodSection />
         <ControlPanel />
         <FoodControlWindow />
