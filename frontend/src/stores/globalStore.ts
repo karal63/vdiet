@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
-import type { Day, Error, LoggedUser } from "../types/global";
+import type { Day, Error, LoggedUser, Water } from "../types/global";
+import { v4 as uuidv4 } from "uuid";
 
 axios.defaults.withCredentials = true;
 
@@ -97,7 +98,27 @@ export const useGlobalStore = defineStore("global", () => {
     const currentDay = ref<Day | undefined>({
         date: "",
         food: [],
+        waterIntake: [],
     });
+
+    const addWaterIntake = (newWaterIntake: Water) => {
+        if (!currentDay.value) return;
+
+        const currentWater = currentDay.value.waterIntake || [];
+
+        currentDay.value.waterIntake = [
+            ...currentWater,
+            {
+                id: uuidv4(),
+                ...newWaterIntake,
+            },
+        ];
+    };
+
+    // make glasses selectable and if user select some of them, will be able to delete selected
+    // to this array add those glasses and when clicking button check if rendered intake is in this array
+    // if so delete them
+    const selectedWaterIntakes = ref([]);
 
     const fullHistory = ref<Day[]>([]);
 
@@ -118,5 +139,6 @@ export const useGlobalStore = defineStore("global", () => {
         currentDay,
         updateDay,
         fullHistory,
+        addWaterIntake,
     };
 });

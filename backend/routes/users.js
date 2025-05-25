@@ -205,6 +205,7 @@ router.put("/users/history", verifyKey, async (req, res) => {
                 return {
                     ...day,
                     food: req.body.globalCurrentDay.food,
+                    waterIntake: req.body.globalCurrentDay.waterIntake,
                 };
             }
             return day;

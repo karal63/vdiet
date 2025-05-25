@@ -3,6 +3,8 @@ import { onMounted, ref, watch } from "vue";
 import { summary } from "../../constants/summary";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
+import WaterSummary from "./WaterSummary.vue";
+import type { Meal } from "../../types/global";
 
 const foodStore = useFoodStore();
 const globalStore = useGlobalStore();
@@ -42,7 +44,7 @@ onMounted(() => {
 
 watch(
     () => globalStore.currentDay?.food,
-    (newMeals) => {
+    (newMeals: Meal[]) => {
         try {
             foodStore.calories = newMeals.reduce(
                 (sum, m) => sum + m.calories,
@@ -91,9 +93,9 @@ watch(
                 </li>
             </ul>
 
-            <div
-                class="w-1/2 border border-mainBorder rounded-xl drop-shadow-xl bg-gray-50"
-            ></div>
+            <div class="w-1/2">
+                <WaterSummary />
+            </div>
         </div>
     </div>
 </template>

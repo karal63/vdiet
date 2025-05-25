@@ -28,9 +28,15 @@ export type Meal = {
     };
 };
 
+export type Water = {
+    id?: string;
+    amountMl: number;
+};
+
 export type Day = {
     date: string;
     food: Meal[];
+    waterIntake: Water[];
 };
 
 export type ProfileMenuExposed = {
