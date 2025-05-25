@@ -40,21 +40,36 @@ onMounted(() => {
     foodStore.carbohydrates = 0;
 });
 
-// watch(globalStore.currentDay?.food, (newMeals) => {
-//   foodStore.calories = newMeals.reduce((sum, m) => sum + m.calories, 0);
-//   foodStore.protein = newMeals.reduce((sum, m) => sum + m.macronutrients.protein, 0);
-//   foodStore.carbohydrates = newMeals.reduce((sum, m) => sum + m.macronutrients.carbohydrates, 0);
-// }, { deep: true });
-
-// TODO: update general details from every SingleMeal
+watch(
+    () => globalStore.currentDay?.food,
+    (newMeals) => {
+        try {
+            foodStore.calories = newMeals.reduce(
+                (sum, m) => sum + m.calories,
+                0
+            );
+            foodStore.protein = newMeals.reduce(
+                (sum, m) => sum + m.macronutrients.protein,
+                0
+            );
+            foodStore.carbohydrates = newMeals.reduce(
+                (sum, m) => sum + m.macronutrients.carbohydrates,
+                0
+            );
+        } catch (error) {
+            console.log("no day found.");
+        }
+    },
+    { deep: true }
+);
 </script>
 
 <template>
-    <div class="flex gap-10 mt-10">
-        <div class="w-1/2">
-            <h1 class="text-2xl">Your goals</h1>
+    <div class="mt-10">
+        <h1 class="text-2xl">Your goals</h1>
 
-            <ul class="flex flex-col gap-6 mt-5">
+        <div class="flex gap-10 h-[170px]">
+            <ul class="w-1/2 flex flex-col gap-6 mt-5">
                 <li v-for="summaryDetail in summary">
                     <div class="flex justify-between">
                         <p class="text-secondary">{{ summaryDetail.name }}</p>
@@ -70,15 +85,15 @@ onMounted(() => {
                             :style="{
                                 width: `${getPercent(summaryDetail.name)}%`,
                             }"
-                            class="absolute left-0 top-0 bg-avocado-500 h-1 w-1/2"
+                            class="absolute left-0 top-0 bg-avocado-500 h-1 max-w-full transition-all duration-300"
                         ></div>
                     </div>
                 </li>
             </ul>
-        </div>
 
-        <div
-            class="w-1/2 border border-mainBorder rounded-xl drop-shadow-xl bg-gray-50"
-        ></div>
+            <div
+                class="w-1/2 border border-mainBorder rounded-xl drop-shadow-xl bg-gray-50"
+            ></div>
+        </div>
     </div>
 </template>

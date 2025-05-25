@@ -30,9 +30,9 @@ onMounted(() => {
     emit("updateCarbohydrates", props.singleMeal.macronutrients.carbohydrates);
     emit("updateProtein", props.singleMeal.macronutrients.protein);
 
-    foodStore.calories += props.singleMeal.calories;
-    foodStore.protein += props.singleMeal.macronutrients.protein;
-    foodStore.carbohydrates += props.singleMeal.macronutrients.carbohydrates;
+    // foodStore.calories += props.singleMeal.calories;
+    // foodStore.protein += props.singleMeal.macronutrients.protein;
+    // foodStore.carbohydrates += props.singleMeal.macronutrients.carbohydrates;
 });
 
 const areDetailsOpen = ref(false);
