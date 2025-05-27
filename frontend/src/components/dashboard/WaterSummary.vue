@@ -26,7 +26,16 @@ const addIntake = () => {
 };
 
 const selectWater = (waterIntake) => {
-    console.log(waterIntake);
+    if (
+        globalStore.selectedWaterIntakes.some(
+            (selected) => selected.id === waterIntake.id
+        )
+    ) {
+        return (globalStore.selectedWaterIntakes =
+            globalStore.selectedWaterIntakes.filter(
+                (selected) => selected.id !== waterIntake.id
+            ));
+    }
     // check if exists, then delete
     globalStore.selectedWaterIntakes = [
         ...globalStore.selectedWaterIntakes,
