@@ -101,6 +101,8 @@ export const useGlobalStore = defineStore("global", () => {
         waterIntake: [],
     });
 
+    const fullHistory = ref<Day[]>([]);
+
     const addWaterIntake = (newWaterIntake: Water) => {
         if (!currentDay.value) return;
 
@@ -118,9 +120,25 @@ export const useGlobalStore = defineStore("global", () => {
     // make glasses selectable and if user select some of them, will be able to delete selected
     // to this array add those glasses and when clicking button check if rendered intake is in this array
     // if so delete them
-    const selectedWaterIntakes = ref([]);
+    const selectedWaterIntakes = ref<Water[]>([]);
 
-    const fullHistory = ref<Day[]>([]);
+    const deleteWaterIntakes = () => {
+        if (!currentDay.value?.waterIntake) return;
+        const newWaterIntake = currentDay.value?.waterIntake.filter(
+            (intake) =>
+                !selectedWaterIntakes.value.some(
+                    (selected) => selected.id === intake.id
+                )
+        );
+
+        currentDay.value.waterIntake = newWaterIntake;
+        selectedWaterIntakes.value = [];
+    };
+
+    const isProtecteDate = () => {
+        const currentDate = new Date().toISOString().split("T")[0];
+        return currentDay.value?.date === currentDate;
+    };
 
     return {
         isAuthenticated,
@@ -140,5 +158,8 @@ export const useGlobalStore = defineStore("global", () => {
         updateDay,
         fullHistory,
         addWaterIntake,
+        isProtecteDate,
+        selectedWaterIntakes,
+        deleteWaterIntakes,
     };
 });
