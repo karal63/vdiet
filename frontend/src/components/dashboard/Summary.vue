@@ -60,6 +60,9 @@ watch(
             );
         } catch (error) {
             console.log("no day found.");
+            foodStore.calories = 0;
+            foodStore.protein = 0;
+            foodStore.carbohydrates = 0;
         }
     },
     { deep: true }
