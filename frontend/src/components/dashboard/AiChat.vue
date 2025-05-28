@@ -31,7 +31,7 @@ const handleSubmit = () => {
             </div>
 
             <!-- main section -->
-            <div class="px-6 h-[410px]">
+            <div class="px-6 h-[370px]">
                 <!-- default screen -->
                 <div
                     v-if="globalStore.aiChatHistory.length === 0"
@@ -88,7 +88,17 @@ const handleSubmit = () => {
         </div>
 
         <div class="mx-6 relative">
+            <div class="mb-2 text-sm">
+                <p class="text-center text-gray-400">
+                    Message requests are not available right now.
+                </p>
+                <p class="text-center text-gray-400">
+                    Please follow this page to use our AI assistant.
+                    <a href="" class="text-avocado-600">Link</a>
+                </p>
+            </div>
             <textarea
+                disabled
                 v-model="userQuestion"
                 type="text"
                 placeholder="How can I help?"
@@ -99,6 +109,7 @@ const handleSubmit = () => {
             <!-- control elements -->
             <div class="absolute bottom-2 right-2 flex gap-3 items-center">
                 <button
+                    disabled
                     @click="handleSubmit"
                     class="w-10 h-10 rounded-full text-2xl flex-center cursor-pointer transition-all"
                     :class="

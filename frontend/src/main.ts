@@ -8,6 +8,7 @@ import AuthForm from "./pages/AuthForm.vue";
 import Dashboard from "./pages/Dashboard.vue";
 import { useGlobalStore } from "./stores/globalStore";
 import ProtectedLayot from "./pages/ProtectedLayot.vue";
+import Home from "./pages/Home.vue";
 
 const pinia = createPinia();
 
@@ -44,10 +45,10 @@ const routes = [
         component: AuthForm,
         props: { mode: "signup" },
     },
-    // {
-    //     path: "/",
-    //     component: Landing,
-    // },
+    {
+        path: "/",
+        component: Home,
+    },
 ];
 
 const router = createRouter({
