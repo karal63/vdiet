@@ -140,6 +140,10 @@ export const useGlobalStore = defineStore("global", () => {
         return currentDay.value?.date === currentDate;
     };
 
+    const isAiChatOpen = ref(false);
+
+    const aiChatHistory = ref([]);
+
     return {
         isAuthenticated,
         login,
@@ -161,5 +165,7 @@ export const useGlobalStore = defineStore("global", () => {
         isProtecteDate,
         selectedWaterIntakes,
         deleteWaterIntakes,
+        isAiChatOpen,
+        aiChatHistory,
     };
 });

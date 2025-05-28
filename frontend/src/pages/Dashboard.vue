@@ -8,6 +8,7 @@ import { useGlobalStore } from "../stores/globalStore";
 import { computed, onMounted, ref, watch } from "vue";
 import type { Day } from "../types/global";
 import Summary from "../components/dashboard/Summary.vue";
+import AiChat from "../components/dashboard/AiChat.vue";
 
 const globalStore = useGlobalStore();
 const foodStore = useFoodStore();
@@ -82,5 +83,6 @@ const formattedDate = computed(() => {
         <FoodSection />
         <ControlPanel />
         <FoodControlWindow />
+        <AiChat />
     </div>
 </template>

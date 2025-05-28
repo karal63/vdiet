@@ -30,7 +30,7 @@ export type Meal = {
 
 export type Water = {
     id?: string;
-    amountMl: number;
+    volumeMl: number;
 };
 
 export type Day = {
