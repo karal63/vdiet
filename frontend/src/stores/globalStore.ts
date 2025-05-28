@@ -3,6 +3,7 @@ import { ref } from "vue";
 import axios from "axios";
 import type { Day, Error, LoggedUser, Water } from "../types/global";
 import { v4 as uuidv4 } from "uuid";
+import.meta.env.AI_KEY;
 
 axios.defaults.withCredentials = true;
 
@@ -144,6 +145,24 @@ export const useGlobalStore = defineStore("global", () => {
 
     const aiChatHistory = ref([]);
 
+    const sendMessage = async (userInput: string) => {
+        const key = "123";
+        const url = "https://api.openai.com/v1/chat/completions";
+
+        const headers = {
+            Authorization: `Bearer ${key}`,
+            "Content-Type": "application/json",
+        };
+        const data = {
+            body: JSON.stringify({
+                model: "gpt-4o",
+                message: [{ role: "user", content: userInput }],
+            }),
+        };
+        const resAi = await axios.post(url, data, headers);
+        console.log(resAi);
+    };
+
     return {
         isAuthenticated,
         login,
@@ -167,5 +186,6 @@ export const useGlobalStore = defineStore("global", () => {
         deleteWaterIntakes,
         isAiChatOpen,
         aiChatHistory,
+        sendMessage,
     };
 });

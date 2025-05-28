@@ -6,6 +6,10 @@ import { ref } from "vue";
 const globalStore = useGlobalStore();
 
 const userQuestion = ref("");
+
+const handleSubmit = () => {
+    globalStore.sendMessage(userQuestion.value);
+};
 </script>
 
 <template>
@@ -95,6 +99,7 @@ const userQuestion = ref("");
             <!-- control elements -->
             <div class="absolute bottom-2 right-2 flex gap-3 items-center">
                 <button
+                    @click="handleSubmit"
                     class="w-10 h-10 rounded-full text-2xl flex-center cursor-pointer transition-all"
                     :class="
                         userQuestion
