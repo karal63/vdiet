@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useGlobalStore } from "../../stores/globalStore";
 import { Icon } from "@iconify/vue";
+import { RouterLink } from "vue-router";
 
 const store = useGlobalStore();
 
@@ -19,12 +20,13 @@ defineExpose({
     >
         <ul class="">
             <li>
-                <button
+                <RouterLink
+                    to="/settings"
                     class="py-2 w-full px-5 flex items-center justify-end gap-4 cursor-pointer rounded-xl hover:bg-avocado-100 transition-all"
                 >
                     Settings
                     <Icon icon="hugeicons:settings-02" class="text-2xl" />
-                </button>
+                </RouterLink>
             </li>
             <li>
                 <button

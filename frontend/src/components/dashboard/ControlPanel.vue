@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
 
 const foodStore = useFoodStore();
 const globalStore = useGlobalStore();
@@ -16,16 +16,23 @@ const handleClick = () => {
 
 const currentDate = new Date().toISOString().split("T")[0];
 
-const isCreatingAllowed = () => {
-    if (currentDate !== globalStore.currentDay?.date) {
+const isCreatingAllowed = computed(() => {
+    const loadedDate = globalStore.currentDay?.date;
+    if (!loadedDate) return false;
+
+    if (currentDate !== loadedDate) {
         return false;
     }
+
     return true;
-};
+});
+
+watchEffect(() => {
+    console.log(globalStore.currentDay?.date);
+});
 
 onMounted(() => {
     timeoutId.value = setTimeout(() => {
-        console.log("opening ai asistant");
         isAiMenuOpen.value = true;
     }, 1000);
 });
@@ -38,7 +45,7 @@ onUnmounted(() => {
 <template>
     <div class="fixed bottom-3 right-5 flex gap-3 flex-col items-end">
         <div class="flex flex-col gap-4 items-end">
-            <div
+            <!-- <div
                 class="relative bg-avocado-200 border border-mainBorder w-[200px] px-3 py-2 rounded-md shadow-2xl transition-all after:w-3 after:h-3 after:absolute after:right-5 after:-bottom-[6px] after:transform after:rotate-45 after:rounded-[2px] after:-z-10 after:bg-gray-800"
                 :class="isAiMenuOpen ? 'right-0' : '-right-[300px]'"
             >
@@ -55,11 +62,11 @@ onUnmounted(() => {
                 class="w-12 h-12 bg-gray-800 flex-center text-white rounded-full text-4xl cursor-pointer"
             >
                 <Icon icon="hugeicons:ai-magic" />
-            </button>
+            </button> -->
         </div>
 
         <button
-            v-if="isCreatingAllowed()"
+            v-if="isCreatingAllowed"
             @click="handleClick"
             class="bg-avocado-500 flex items-center gap-1 text-white pl-3 pr-5 py-1 rounded-md shadow-md cursor-pointer"
         >

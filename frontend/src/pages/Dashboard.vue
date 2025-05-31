@@ -83,6 +83,6 @@ const formattedDate = computed(() => {
         <FoodSection />
         <ControlPanel />
         <FoodControlWindow />
-        <AiChat />
+        <!-- <AiChat /> -->
     </div>
 </template>

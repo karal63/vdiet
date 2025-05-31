@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard.vue";
 import { useGlobalStore } from "./stores/globalStore";
 import ProtectedLayot from "./pages/ProtectedLayot.vue";
 import Home from "./pages/Home.vue";
+import Settings from "./pages/Settings.vue";
 
 const pinia = createPinia();
 
@@ -31,6 +32,11 @@ const routes = [
             {
                 path: "/sleep",
                 component: Dashboard,
+                // meta: { requiresAuth: true },
+            },
+            {
+                path: "/settings",
+                component: Settings,
                 // meta: { requiresAuth: true },
             },
         ],
