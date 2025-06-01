@@ -2,12 +2,13 @@
 import { onMounted, watch, watchEffect } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import { useGlobalStore } from "../stores/globalStore";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useFoodStore } from "../stores/foodStore";
 
 const globalStore = useGlobalStore();
 const foodStore = useFoodStore();
 const router = useRouter();
+const route = useRoute();
 
 watchEffect(() => {
     if (!globalStore.isAuthenticated) {
@@ -28,11 +29,26 @@ watch(
             globalStore.currentDay?.date
         ) {
             console.log("updating meals in database");
-            globalStore.updateDay(globalStore.currentDay);
+            if (globalStore.currentDay.goals) {
+                globalStore.updateDay(globalStore.currentDay);
+            } else {
+                globalStore.updateDay({
+                    ...globalStore.currentDay,
+                    goals: {
+                        caloriesGoal: 0,
+                        proteinGoal: 0,
+                        carbohydratesGoal: 0,
+                    },
+                });
+            }
         }
     },
-    { deep: true }
+    { deep: true, immediate: true }
 );
+
+watchEffect(() => {
+    console.log(route.path);
+});
 </script>
 
 <template>

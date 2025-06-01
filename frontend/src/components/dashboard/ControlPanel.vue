@@ -27,10 +27,6 @@ const isCreatingAllowed = computed(() => {
     return true;
 });
 
-watchEffect(() => {
-    console.log(globalStore.currentDay?.date);
-});
-
 onMounted(() => {
     timeoutId.value = setTimeout(() => {
         isAiMenuOpen.value = true;

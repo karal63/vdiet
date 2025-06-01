@@ -33,10 +33,17 @@ export type Water = {
     volumeMl: number;
 };
 
+export type Goal = {
+    caloriesGoal: number;
+    proteinGoal: number;
+    carbohydratesGoal: number;
+};
+
 export type Day = {
     date: string;
     food: Meal[];
     waterIntake: Water[];
+    goals: Goal;
 };
 
 export type ProfileMenuExposed = {

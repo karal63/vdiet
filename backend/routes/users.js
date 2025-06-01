@@ -164,7 +164,15 @@ router.post("/users/history", verifyKey, async (req, res) => {
             await db.execute("UPDATE users SET history = ? WHERE id = ?", [
                 JSON.stringify([
                     ...parsedHistory,
-                    { date: req.body.today, food: [] },
+                    {
+                        date: req.body.today,
+                        food: [],
+                        goals: {
+                            caloriesGoal: 0,
+                            proteinGoal: 0,
+                            carbohydratesGoal: 0,
+                        },
+                    },
                 ]),
                 req.decodedUser.userId,
             ]);
@@ -202,14 +210,17 @@ router.put("/users/history", verifyKey, async (req, res) => {
 
         const updatedHistory = parsedHistory.map((day) => {
             if (day.date === req.body.today) {
+                console.log(req.body.globalCurrentDay);
                 return {
                     ...day,
                     food: req.body.globalCurrentDay.food,
                     waterIntake: req.body.globalCurrentDay.waterIntake,
+                    goals: req.body.globalCurrentDay.goals,
                 };
             }
             return day;
         });
+        console.log(updatedHistory);
         const jsonUpdatedHistory = JSON.stringify(updatedHistory);
 
         await db.execute("UPDATE users SET history = ? WHERE id = ?", [
