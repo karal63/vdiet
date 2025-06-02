@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
-import { summary } from "../../constants/summary";
+import { computed, watch } from "vue";
+// import { summary } from "../../constants/summary";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 import WaterSummary from "./WaterSummary.vue";
@@ -17,11 +17,11 @@ const summary = [
 ];
 
 // Reset values on mount
-onMounted(() => {
-    foodStore.calories = 0;
-    foodStore.protein = 0;
-    foodStore.carbohydrates = 0;
-});
+// onMounted(() => {
+//     foodStore.calories = 0;
+//     foodStore.protein = 0;
+//     foodStore.carbohydrates = 0;
+// });
 
 // Watch for food changes and recalculate
 watch(
@@ -50,22 +50,26 @@ watch(
     { deep: true }
 );
 
+// when updating goals in settings and moving back to dashboard values are not upd,
+// or it works, find the solution
+
 // Computed percentages
 const percentages = computed(() => {
     const goals = globalStore.currentDay?.goals;
+    console.log("rendered");
+    console.log(goals);
+    console.log(foodStore.calories);
+
     return {
         Calories: goals?.caloriesGoal
-            ? ((foodStore.calories * 100) / goals.caloriesGoal).toFixed(2)
-            : "0.00",
+            ? (foodStore.calories * 100) / goals.caloriesGoal
+            : "0",
         Protein: goals?.proteinGoal
-            ? ((foodStore.protein * 100) / goals.proteinGoal).toFixed(2)
-            : "0.00",
+            ? (foodStore.protein * 100) / goals.proteinGoal
+            : "0",
         Carbohydrates: goals?.carbohydratesGoal
-            ? (
-                  (foodStore.carbohydrates * 100) /
-                  goals.carbohydratesGoal
-              ).toFixed(2)
-            : "0.00",
+            ? (foodStore.carbohydrates * 100) / goals.carbohydratesGoal
+            : "0",
     };
 });
 
@@ -92,7 +96,11 @@ const values = computed(() => {
                     <div class="flex justify-between">
                         <p class="text-secondary">{{ summaryDetail.name }}</p>
                         <p class="text-right pt-1 text-sm text-secondary">
-                            {{ values[summaryDetail.name] }}
+                            {{
+                                values[
+                                    summaryDetail.name as keyof typeof values
+                                ]
+                            }}
                         </p>
                     </div>
                     <div class="mt-1 relative">
@@ -101,7 +109,7 @@ const values = computed(() => {
                         ></div>
                         <div
                             :style="{
-                                width: `${percentages[summaryDetail.name]}%`,
+                                width: `${percentages[summaryDetail.name as keyof typeof values]}%`,
                             }"
                             class="absolute left-0 top-0 bg-avocado-500 h-1 max-w-full transition-all duration-300"
                         ></div>
