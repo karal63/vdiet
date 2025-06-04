@@ -86,7 +86,11 @@ onBeforeMount(() => {
                 @click="toggleMenu"
                 class="w-10 h-10 bg-gradient-to-r from-avocado-200 to-avocado-500 rounded-full cursor-pointer"
             ></button>
-            <ProfileMenu v-if="profileMenuOpen" ref="menuComponentRef" />
+            <ProfileMenu
+                v-if="profileMenuOpen"
+                @close="profileMenuOpen = false"
+                ref="menuComponentRef"
+            />
         </div>
     </div>
 </template>

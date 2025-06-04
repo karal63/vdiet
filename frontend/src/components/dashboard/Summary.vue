@@ -75,13 +75,11 @@ const values = computed(() => {
     const goals = globalStore.currentDay?.goals;
     return {
         Calories: `${foodStore.calories.toFixed(2)} / ${
-            goals?.caloriesGoal ?? 2000
+            goals?.caloriesGoal
         }kcal`,
-        Protein: `${foodStore.protein.toFixed(2)} / ${
-            goals?.proteinGoal ?? 160
-        }g`,
+        Protein: `${foodStore.protein.toFixed(2)} / ${goals?.proteinGoal}g`,
         Carbohydrates: `${foodStore.carbohydrates.toFixed(2)} / ${
-            goals?.carbohydratesGoal ?? 130
+            goals?.carbohydratesGoal
         }g`,
     };
 });

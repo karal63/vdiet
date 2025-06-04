@@ -11,6 +11,9 @@ const menuRef = ref<HTMLElement | null>(null);
 defineExpose({
     menuRef,
 });
+defineEmits<{
+    (e: "close"): void;
+}>();
 </script>
 
 <template>
@@ -21,6 +24,7 @@ defineExpose({
         <ul class="">
             <li>
                 <RouterLink
+                    @click="$emit('close')"
                     to="/settings"
                     class="py-2 w-full px-5 flex items-center justify-end gap-4 cursor-pointer rounded-xl hover:bg-avocado-100 transition-all"
                 >
