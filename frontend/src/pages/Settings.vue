@@ -17,6 +17,20 @@ const userSettings = ref({
     },
 });
 
+watch(
+    () => globalStore.currentDay?.goals,
+    () => {
+        console.log(globalStore.currentDay?.goals.caloriesGoal);
+        if (!globalStore.currentDay?.goals) return;
+        userSettings.value.goals = {
+            caloriesGoal: globalStore.currentDay?.goals.caloriesGoal,
+            proteinGoal: globalStore.currentDay?.goals.proteinGoal,
+            carbohydratesGoal: globalStore.currentDay?.goals.carbohydratesGoal,
+        };
+    },
+    { deep: true, immediate: true }
+);
+
 const isEditting = ref(false);
 
 const handleSubmit = () => {

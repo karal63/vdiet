@@ -161,17 +161,24 @@ router.post("/users/history", verifyKey, async (req, res) => {
         );
 
         if (!isExisting) {
+            const prevExisting = parsedHistory[parsedHistory.length - 1];
+            // fix bug with not updated creating mode when date is equal to current
+            console.log(prevExisting);
+
             await db.execute("UPDATE users SET history = ? WHERE id = ?", [
                 JSON.stringify([
                     ...parsedHistory,
                     {
                         date: req.body.today,
                         food: [],
-                        goals: {
-                            caloriesGoal: 0,
-                            proteinGoal: 0,
-                            carbohydratesGoal: 0,
-                        },
+                        waterIntake: [],
+                        goals: prevExisting
+                            ? prevExisting.goals
+                            : {
+                                  caloriesGoal: 2599,
+                                  proteinGoal: 199,
+                                  carbohydratesGoal: 199,
+                              },
                     },
                 ]),
                 req.decodedUser.userId,
@@ -210,7 +217,6 @@ router.put("/users/history", verifyKey, async (req, res) => {
 
         const updatedHistory = parsedHistory.map((day) => {
             if (day.date === req.body.today) {
-                console.log(req.body.globalCurrentDay);
                 return {
                     ...day,
                     food: req.body.globalCurrentDay.food,
@@ -220,7 +226,6 @@ router.put("/users/history", verifyKey, async (req, res) => {
             }
             return day;
         });
-        console.log(updatedHistory);
         const jsonUpdatedHistory = JSON.stringify(updatedHistory);
 
         await db.execute("UPDATE users SET history = ? WHERE id = ?", [

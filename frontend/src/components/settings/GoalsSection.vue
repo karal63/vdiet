@@ -26,6 +26,7 @@ defineProps<{
                     <label class="text-lg">Calories:</label>
                     <div class="flex gap-2 items-center">
                         <input
+                            :value="goals.caloriesGoal"
                             @input="
                                 (e) =>
                                     $emit('update:goals', {
@@ -51,6 +52,7 @@ defineProps<{
                     <label class="text-lg">Protein:</label>
                     <div class="flex gap-2 items-center">
                         <input
+                            :value="goals.proteinGoal"
                             @input="
                                 (e) =>
                                     $emit('update:goals', {
@@ -76,6 +78,7 @@ defineProps<{
                     <label class="text-lg">Carbohydrates:</label>
                     <div class="flex gap-2 items-center">
                         <input
+                            :value="goals.carbohydratesGoal"
                             @input="
                                 (e) =>
                                     $emit('update:goals', {
