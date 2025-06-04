@@ -74,9 +74,13 @@ const percentages = computed(() => {
 const values = computed(() => {
     const goals = globalStore.currentDay?.goals;
     return {
-        Calories: `${foodStore.calories} / ${goals?.caloriesGoal ?? 2000}kcal`,
-        Protein: `${foodStore.protein} / ${goals?.proteinGoal ?? 160}g`,
-        Carbohydrates: `${foodStore.carbohydrates} / ${
+        Calories: `${foodStore.calories.toFixed(2)} / ${
+            goals?.caloriesGoal ?? 2000
+        }kcal`,
+        Protein: `${foodStore.protein.toFixed(2)} / ${
+            goals?.proteinGoal ?? 160
+        }g`,
+        Carbohydrates: `${foodStore.carbohydrates.toFixed(2)} / ${
             goals?.carbohydratesGoal ?? 130
         }g`,
     };
