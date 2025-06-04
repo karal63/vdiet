@@ -45,10 +45,6 @@ watch(
     },
     { deep: true, immediate: true }
 );
-
-watchEffect(() => {
-    console.log(route.path);
-});
 </script>
 
 <template>

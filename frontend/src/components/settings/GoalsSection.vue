@@ -1,45 +1,20 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { useGlobalStore } from "../../stores/globalStore";
-import { ref, watch, watchEffect } from "vue";
 import type { Goal } from "../../types/global";
 
-const globalStore = useGlobalStore();
-
-const goals = ref<Goal>({
-    caloriesGoal: 0,
-    proteinGoal: 0,
-    carbohydratesGoal: 0,
-});
-
-// Watch for currentDay to become available and update goals
-watch(
-    () => globalStore.currentDay,
-    (newDay) => {
-        if (newDay?.goals) {
-            goals.value = {
-                caloriesGoal: newDay.goals.caloriesGoal,
-                proteinGoal: newDay.goals.proteinGoal,
-                carbohydratesGoal: newDay.goals.carbohydratesGoal,
-            };
+defineEmits<{
+    (
+        event: "update:goals",
+        payload: {
+            caloriesGoal: number;
+            proteinGoal: number;
+            carbohydratesGoal: number;
         }
-    },
-    { immediate: true } // Run immediately in case it's already loaded
-);
-
-watch(
-    () => goals.value,
-    () => {
-        if (globalStore.currentDay?.goals) {
-            globalStore.currentDay.goals.caloriesGoal =
-                goals.value.caloriesGoal;
-            globalStore.currentDay.goals.proteinGoal = goals.value.proteinGoal;
-            globalStore.currentDay.goals.carbohydratesGoal =
-                goals.value.carbohydratesGoal;
-        }
-    },
-    { deep: true }
-);
+    ): void;
+}>();
+defineProps<{
+    goals: Goal;
+}>();
 </script>
 
 <template>
@@ -51,7 +26,13 @@ watch(
                     <label class="text-lg">Calories:</label>
                     <div class="flex gap-2 items-center">
                         <input
-                            v-model="goals.caloriesGoal"
+                            @input="
+                                (e) =>
+                                    $emit('update:goals', {
+                                        ...goals,
+                                        caloriesGoal: +(e.target as HTMLInputElement).value,
+                                    })
+                            "
                             type="number"
                             class="border rounded-md outline-none border-mainBorder px-3 py-1"
                         />
@@ -70,7 +51,13 @@ watch(
                     <label class="text-lg">Protein:</label>
                     <div class="flex gap-2 items-center">
                         <input
-                            v-model="goals.proteinGoal"
+                            @input="
+                                (e) =>
+                                    $emit('update:goals', {
+                                        ...goals,
+                                        proteinGoal: +(e.target as HTMLInputElement).value,
+                                    })
+                            "
                             type="number"
                             class="border rounded-md outline-none border-mainBorder px-3 py-1"
                         />
@@ -89,7 +76,13 @@ watch(
                     <label class="text-lg">Carbohydrates:</label>
                     <div class="flex gap-2 items-center">
                         <input
-                            v-model="goals.carbohydratesGoal"
+                            @input="
+                                (e) =>
+                                    $emit('update:goals', {
+                                        ...goals,
+                                        carbohydratesGoal: +(e.target as HTMLInputElement).value,
+                                    })
+                            "
                             type="number"
                             class="border rounded-md outline-none border-mainBorder px-3 py-1"
                         />

@@ -56,9 +56,6 @@ watch(
 // Computed percentages
 const percentages = computed(() => {
     const goals = globalStore.currentDay?.goals;
-    console.log("rendered");
-    console.log(goals);
-    console.log(foodStore.calories);
 
     return {
         Calories: goals?.caloriesGoal

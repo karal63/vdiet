@@ -3,8 +3,35 @@ import { Icon } from "@iconify/vue";
 import { useFoodStore } from "../stores/foodStore";
 import GoalsSection from "../components/settings/GoalsSection.vue";
 import DangerZone from "../components/settings/DangerZone.vue";
+import { ref, watch, watchEffect } from "vue";
+import { useGlobalStore } from "../stores/globalStore";
 
-const foodStore = useFoodStore();
+const globalStore = useGlobalStore();
+
+const userSettings = ref({
+    username: "",
+    goals: {
+        caloriesGoal: 0,
+        proteinGoal: 0,
+        carbohydratesGoal: 0,
+    },
+});
+
+const isEditting = ref(false);
+
+const handleSubmit = () => {
+    if (!globalStore.currentDay) return;
+    console.log("applying new settings");
+    globalStore.currentDay.goals = userSettings.value.goals;
+};
+
+watch(
+    () => userSettings.value.goals,
+    () => {
+        isEditting.value = true;
+    },
+    { deep: true }
+);
 </script>
 
 <template>
@@ -18,6 +45,7 @@ const foodStore = useFoodStore();
                     <label class="text-lg">User name:</label>
                     <div class="flex gap-2 items-center">
                         <input
+                            v-model="userSettings.username"
                             type="text"
                             class="border rounded-md outline-none border-mainBorder px-3 py-1"
                         />
@@ -32,7 +60,17 @@ const foodStore = useFoodStore();
                     </div>
                 </div>
 
-                <GoalsSection />
+                <GoalsSection v-model:goals="userSettings.goals" />
+
+                <div class="flex justify-end items-center">
+                    <button
+                        @click.prevent="handleSubmit"
+                        class="px-4 py-1 text-lg rounded-md text-white"
+                        :class="isEditting ? 'bg-avocado-500' : 'bg-gray-200'"
+                    >
+                        Save
+                    </button>
+                </div>
 
                 <!-- danger zone -->
                 <DangerZone />

@@ -49,3 +49,8 @@ export type Day = {
 export type ProfileMenuExposed = {
     menuRef: HTMLElement | null;
 };
+
+export type userSettings = {
+    username: string;
+    goals: Goal;
+};
