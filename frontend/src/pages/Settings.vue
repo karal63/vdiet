@@ -17,10 +17,11 @@ const userSettings = ref({
     },
 });
 
+const isEditing = ref(false);
+
 watch(
     () => globalStore.currentDay?.goals,
     () => {
-        console.log(globalStore.currentDay?.goals.caloriesGoal);
         if (!globalStore.currentDay?.goals) return;
         userSettings.value.goals = {
             caloriesGoal: globalStore.currentDay?.goals.caloriesGoal,
@@ -31,18 +32,21 @@ watch(
     { deep: true, immediate: true }
 );
 
-const isEditting = ref(false);
-
 const handleSubmit = () => {
     if (!globalStore.currentDay) return;
     console.log("applying new settings");
     globalStore.currentDay.goals = userSettings.value.goals;
+    isEditing.value = false;
 };
 
 watch(
     () => userSettings.value.goals,
-    () => {
-        isEditting.value = true;
+    (newVal) => {
+        const changed =
+            JSON.stringify(newVal) !==
+            JSON.stringify(globalStore.currentDay?.goals);
+
+        isEditing.value = changed;
     },
     { deep: true }
 );
@@ -79,8 +83,8 @@ watch(
                 <div class="flex justify-end items-center">
                     <button
                         @click.prevent="handleSubmit"
-                        class="px-4 py-1 text-lg rounded-md text-white"
-                        :class="isEditting ? 'bg-avocado-500' : 'bg-gray-200'"
+                        class="px-4 py-1 text-lg rounded-md text-white cursor-pointer"
+                        :class="isEditing ? 'bg-avocado-500' : 'bg-gray-200'"
                     >
                         Save
                     </button>
