@@ -93,12 +93,14 @@ const filteredMeals = computed(() => {
                 <li>
                     Carbohydrates:
                     <span class="text-avocado-600"
-                        >{{ totalCarbohydrates }}g</span
+                        >{{ totalCarbohydrates.toFixed(2) }}g</span
                     >
                 </li>
                 <li>
                     Protein:
-                    <span class="text-avocado-600">{{ totalProtein }}g</span>
+                    <span class="text-avocado-600"
+                        >{{ totalProtein.toFixed(2) }}g</span
+                    >
                 </li>
             </ul>
         </div>

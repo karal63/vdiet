@@ -100,6 +100,11 @@ export const useGlobalStore = defineStore("global", () => {
         date: "",
         food: [],
         waterIntake: [],
+        goals: {
+            caloriesGoal: 0,
+            proteinGoal: 0,
+            carbohydratesGoal: 0,
+        },
     });
 
     const fullHistory = ref<Day[]>([]);

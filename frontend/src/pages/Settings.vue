@@ -1,8 +1,55 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { useFoodStore } from "../stores/foodStore";
+import GoalsSection from "../components/settings/GoalsSection.vue";
+import DangerZone from "../components/settings/DangerZone.vue";
+import { ref, watch, watchEffect } from "vue";
+import { useGlobalStore } from "../stores/globalStore";
 
-const foodStore = useFoodStore();
+const globalStore = useGlobalStore();
+
+const userSettings = ref({
+    username: "",
+    goals: {
+        caloriesGoal: 0,
+        proteinGoal: 0,
+        carbohydratesGoal: 0,
+    },
+});
+
+const isEditing = ref(false);
+
+watch(
+    () => globalStore.currentDay?.goals,
+    () => {
+        if (!globalStore.currentDay?.goals) return;
+        userSettings.value.goals = {
+            caloriesGoal: globalStore.currentDay?.goals.caloriesGoal,
+            proteinGoal: globalStore.currentDay?.goals.proteinGoal,
+            carbohydratesGoal: globalStore.currentDay?.goals.carbohydratesGoal,
+        };
+    },
+    { deep: true, immediate: true }
+);
+
+const handleSubmit = () => {
+    if (!globalStore.currentDay) return;
+    console.log("applying new settings");
+    globalStore.currentDay.goals = userSettings.value.goals;
+    isEditing.value = false;
+};
+
+watch(
+    () => userSettings.value.goals,
+    (newVal) => {
+        const changed =
+            JSON.stringify(newVal) !==
+            JSON.stringify(globalStore.currentDay?.goals);
+
+        isEditing.value = changed;
+    },
+    { deep: true }
+);
 </script>
 
 <template>
@@ -16,6 +63,7 @@ const foodStore = useFoodStore();
                     <label class="text-lg">User name:</label>
                     <div class="flex gap-2 items-center">
                         <input
+                            v-model="userSettings.username"
                             type="text"
                             class="border rounded-md outline-none border-mainBorder px-3 py-1"
                         />
@@ -30,89 +78,20 @@ const foodStore = useFoodStore();
                     </div>
                 </div>
 
-                <div>
-                    <h1 class="font-semibold text-xl mb-2 text-secondary">
-                        Your goals:
-                    </h1>
-                    <div class="border border-mainBorder rounded-md p-4">
-                        <div class="flex flex-col gap-4">
-                            <div class="flex items-center gap-5">
-                                <label class="text-lg">Calories:</label>
-                                <div class="flex gap-2 items-center">
-                                    <input
-                                        v-model="foodStore.caloriesGoal"
-                                        type="text"
-                                        class="border rounded-md outline-none border-mainBorder px-3 py-1"
-                                    />
-                                    <button
-                                        @click.prevent
-                                        class="text-lg text-secondary cursor-pointer"
-                                    >
-                                        <Icon
-                                            icon="material-symbols:edit-outline-rounded"
-                                        />
-                                    </button>
-                                </div>
-                            </div>
+                <GoalsSection v-model:goals="userSettings.goals" />
 
-                            <div class="flex items-center gap-5">
-                                <label class="text-lg">Protein:</label>
-                                <div class="flex gap-2 items-center">
-                                    <input
-                                        type="text"
-                                        class="border rounded-md outline-none border-mainBorder px-3 py-1"
-                                    />
-                                    <button
-                                        @click.prevent
-                                        class="text-lg text-secondary cursor-pointer"
-                                    >
-                                        <Icon
-                                            icon="material-symbols:edit-outline-rounded"
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center gap-5">
-                                <label class="text-lg">Carbohydrates:</label>
-                                <div class="flex gap-2 items-center">
-                                    <input
-                                        type="text"
-                                        class="border rounded-md outline-none border-mainBorder px-3 py-1"
-                                    />
-                                    <button
-                                        @click.prevent
-                                        class="text-lg text-secondary cursor-pointer"
-                                    >
-                                        <Icon
-                                            icon="material-symbols:edit-outline-rounded"
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex justify-end items-center">
+                    <button
+                        @click.prevent="handleSubmit"
+                        class="px-4 py-1 text-lg rounded-md text-white cursor-pointer"
+                        :class="isEditing ? 'bg-avocado-500' : 'bg-gray-200'"
+                    >
+                        Save
+                    </button>
                 </div>
 
                 <!-- danger zone -->
-                <div class="mt-5">
-                    <h1 class="font-semibold text-xl mb-2">Danger zone:</h1>
-                    <div class="border border-red-700 rounded-md p-4">
-                        <div class="flex flex-col gap-4">
-                            <div class="flex items-center justify-between">
-                                <label class="text-lg">Delete account:</label>
-                                <div class="flex gap-2 items-center">
-                                    <button
-                                        @click.prevent
-                                        class="text-md text-red-700 font-semibold cursor-pointer bg-gray-200 px-4 py-1 rounded-md border-mainBorder"
-                                    >
-                                        Delete account
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <DangerZone />
             </form>
         </div>
     </div>

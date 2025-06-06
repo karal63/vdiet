@@ -25,7 +25,6 @@ const handleClickOutside = (e: MouseEvent) => {
         !menuEl.contains(e.target as Node) &&
         (e.target as Node) !== buttonRef.value
     ) {
-        console.log(false);
         profileMenuOpen.value = false;
     }
 };
@@ -49,6 +48,7 @@ onBeforeMount(() => {
             <ul class="mt-4 relative z-10 flex flex-col gap-4">
                 <li
                     v-for="link in sidebarLinks"
+                    :key="link.path"
                     class="w-full flex justify-center"
                 >
                     <RouterLink
@@ -86,7 +86,11 @@ onBeforeMount(() => {
                 @click="toggleMenu"
                 class="w-10 h-10 bg-gradient-to-r from-avocado-200 to-avocado-500 rounded-full cursor-pointer"
             ></button>
-            <ProfileMenu v-if="profileMenuOpen" ref="menuComponentRef" />
+            <ProfileMenu
+                v-if="profileMenuOpen"
+                @close="profileMenuOpen = false"
+                ref="menuComponentRef"
+            />
         </div>
     </div>
 </template>
