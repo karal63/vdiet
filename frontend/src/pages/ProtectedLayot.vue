@@ -2,13 +2,10 @@
 import { onMounted, watch, watchEffect } from "vue";
 import Sidebar from "../components/Sidebar.vue";
 import { useGlobalStore } from "../stores/globalStore";
-import { useRoute, useRouter } from "vue-router";
-import { useFoodStore } from "../stores/foodStore";
+import { useRouter } from "vue-router";
 
 const globalStore = useGlobalStore();
-const foodStore = useFoodStore();
 const router = useRouter();
-const route = useRoute();
 
 watchEffect(() => {
     if (!globalStore.isAuthenticated) {

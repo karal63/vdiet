@@ -19,4 +19,4 @@ export const dishes = [
         },
         type: "morning",
     },
-];
+] as const;

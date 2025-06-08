@@ -54,3 +54,8 @@ export type userSettings = {
     username: string;
     goals: Goal;
 };
+
+export type WaterIntake = {
+    id?: string;
+    volumeMl: number;
+};

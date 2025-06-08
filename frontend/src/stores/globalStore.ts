@@ -72,7 +72,7 @@ export const useGlobalStore = defineStore("global", () => {
 
     const addDay = async () => {
         const today = new Date().toISOString().split("T")[0];
-        const res = await axios.post("http://localhost:5000/users/history", {
+        await axios.post("http://localhost:5000/users/history", {
             today,
         });
     };
@@ -90,7 +90,7 @@ export const useGlobalStore = defineStore("global", () => {
 
     const updateDay = async (globalCurrentDay: Day) => {
         const today = new Date().toISOString().split("T")[0];
-        const res = await axios.put("http://localhost:5000/users/history", {
+        await axios.put("http://localhost:5000/users/history", {
             today,
             globalCurrentDay,
         });
@@ -123,9 +123,6 @@ export const useGlobalStore = defineStore("global", () => {
         ];
     };
 
-    // make glasses selectable and if user select some of them, will be able to delete selected
-    // to this array add those glasses and when clicking button check if rendered intake is in this array
-    // if so delete them
     const selectedWaterIntakes = ref<Water[]>([]);
 
     const deleteWaterIntakes = () => {
@@ -141,32 +138,32 @@ export const useGlobalStore = defineStore("global", () => {
         selectedWaterIntakes.value = [];
     };
 
-    const isProtecteDate = () => {
+    const isProtectedDate = () => {
         const currentDate = new Date().toISOString().split("T")[0];
         return currentDay.value?.date === currentDate;
     };
 
-    const isAiChatOpen = ref(false);
+    // const isAiChatOpen = ref(false);
 
-    const aiChatHistory = ref([]);
+    // const aiChatHistory = ref([]);
 
-    const sendMessage = async (userInput: string) => {
-        const key = "123";
-        const url = "https://api.openai.com/v1/chat/completions";
+    // const sendMessage = async (userInput: string) => {
+    //     const key = "123";
+    //     const url = "https://api.openai.com/v1/chat/completions";
 
-        const headers = {
-            Authorization: `Bearer ${key}`,
-            "Content-Type": "application/json",
-        };
-        const data = {
-            body: JSON.stringify({
-                model: "gpt-4o",
-                message: [{ role: "user", content: userInput }],
-            }),
-        };
-        const resAi = await axios.post(url, data, headers);
-        console.log(resAi);
-    };
+    //     const headers = {
+    //         Authorization: `Bearer ${key}`,
+    //         "Content-Type": "application/json",
+    //     };
+    //     const data = {
+    //         body: JSON.stringify({
+    //             model: "gpt-4o",
+    //             message: [{ role: "user", content: userInput }],
+    //         }),
+    //     };
+    //     const resAi = await axios.post(url, data, headers);
+    //     console.log(resAi);
+    // };
 
     return {
         isAuthenticated,
@@ -186,11 +183,11 @@ export const useGlobalStore = defineStore("global", () => {
         updateDay,
         fullHistory,
         addWaterIntake,
-        isProtecteDate,
+        isProtectedDate,
         selectedWaterIntakes,
         deleteWaterIntakes,
-        isAiChatOpen,
-        aiChatHistory,
-        sendMessage,
+        // isAiChatOpen,
+        // aiChatHistory,
+        // sendMessage,
     };
 });

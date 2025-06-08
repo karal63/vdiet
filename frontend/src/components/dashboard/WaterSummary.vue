@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import { useGlobalStore } from "../../stores/globalStore";
+import type { WaterIntake } from "../../types/global";
 
 const foodStore = useGlobalStore();
 const globalStore = useGlobalStore();
@@ -25,7 +26,8 @@ const addIntake = () => {
     globalStore.addWaterIntake(water.value);
 };
 
-const selectWater = (waterIntake) => {
+const selectWater = (waterIntake: WaterIntake) => {
+    console.log(waterIntake);
     if (
         globalStore.selectedWaterIntakes.some(
             (selected) => selected.id === waterIntake.id
@@ -43,7 +45,7 @@ const selectWater = (waterIntake) => {
     ];
 };
 
-const checkIfSelected = (waterIntake) => {
+const checkIfSelected = (waterIntake: WaterIntake) => {
     return globalStore.selectedWaterIntakes.find(
         (el) => el.id === waterIntake.id
     );
@@ -75,7 +77,7 @@ const deleteWater = () => {
                 </button>
                 <!-- add button -->
                 <button
-                    v-if="globalStore.isProtecteDate()"
+                    v-if="globalStore.isProtectedDate()"
                     @click="addIntake"
                     class="text-3xl relative max-w-max text-secondary cursor-pointer"
                 >
@@ -85,11 +87,11 @@ const deleteWater = () => {
         </div>
 
         <div
-            v-if="globalStore.isProtecteDate()"
+            v-if="globalStore.isProtectedDate()"
             class="flex items-center justify-between"
         >
             <div
-                v-if="globalStore.isProtecteDate()"
+                v-if="globalStore.isProtectedDate()"
                 class="flex items-center gap-2"
             >
                 <input

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { Meal } from "../../types/global";
-import { nextTick, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useFoodStore } from "../../stores/foodStore";
 import { useGlobalStore } from "../../stores/globalStore";
 
