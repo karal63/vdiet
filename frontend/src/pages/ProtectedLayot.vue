@@ -32,6 +32,7 @@ watch(
             if (globalStore.currentDay.goals) {
                 globalStore.updateDay(globalStore.currentDay);
             } else {
+                console.log("goals dont exist", globalStore.currentDay.goals);
                 globalStore.updateDay({
                     ...globalStore.currentDay,
                     goals: {
@@ -43,7 +44,7 @@ watch(
             }
         }
     },
-    { deep: true, immediate: true }
+    { deep: true }
 );
 </script>
 
